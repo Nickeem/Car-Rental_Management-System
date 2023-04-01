@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/pico.min.css">
+    <title>Vehicle</title>
+</head>
+
+<body>
+    
+    <header class="container">
+        <nav>
+            <ul>
+                <li><strong>Brand</strong></li>
+            </ul>
+            <ul>
+                <li><a href="#">Link</a></li>
+                <li><a href="#">Link</a></li>
+                <li><a href="#" role="button">Button</a></li>
+            </ul>
+        </nav>
+        <h1>Vehicle Page</h1>
+    </header>
+    <main class="container">
+        <form>
+
+            <!-- Grid -->
+            <div class="grid">
+
+                <!-- Markup example 1: input is inside label -->
+                <label for="Make">
+                    Make
+                    <input type="text" id="Make" name="Make" placeholder="Make" required>
+                </label>
+
+                <label for="Model">
+                    Model
+                    <input type="text" id="Model" name="Model" placeholder="Model" required>
+                </label>
+
+            </div>
+
+            <!-- Markup example 2: input is after label -->
+            <label for="year">Year</label>
+            <input type="date" name="year" id="year" required>
+
+            <label for="VIN">VIN</label>
+            <input type="text" name="VIN" id="VIN" placeholder="VIN" required>
+
+            <div class="grid">
+                <label for="interior-color">Interior Color</label>
+                <input type="color" name="interior-color" id="interior-color">
+
+                <label for="exterior-color">Exterior color</label>
+                <input type="color" name="exterior-color" id="exterior-color">
+            </div>
+
+            <label for="license">License Plate Number</label>
+            <input type="text" name="license" id="license" placeholder="License Plate Number">
+
+            <label for="odometer">Odometer Reading</label>
+            <input type="number" name="odometer" id="odometer">
+
+            <fieldset>
+                <legend>Availability</legend>
+
+                <label for="not-rented">
+                    <input type="radio" name="availability" id="not-rented" value="not-rented">
+                    Not Rented
+                </label>
+
+
+                <label for="rented">
+                    <input type="radio" name="availability" id="rented" value="rented">
+                    Rented
+                </label>
+
+
+            </fieldset>
+
+            <label for="return-date">Return date</label>
+            <input type="date" name="return-date" id="return-date">
+
+
+            <small>We'll never share your vehicle information for profit</small>
+
+            <!-- Button -->
+            <button type="submit">Submit</button>
+
+        </form>
+    </main>
+</body>
+
+</html>

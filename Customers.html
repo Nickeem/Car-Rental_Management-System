@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/pico.min.css"> 
+    <title>Customer Information</title>
+</head>
+
+<body>
+    <header class="container">
+        <h1>Customer Information</h1>
+    </header>
+
+    <main class="container">
+        <form>
+            <fieldset>
+                <h2>Contact Information</h2>
+                
+                <div class="grid">
+                    <label for="first-name">
+                        First Name
+                        <input type="text" name="first-name" id="first-name" placeholder="First Name" required>
+                    </label>
+                    
+
+                    <label for="last-name">
+                        Last Name
+                        <input type="text" name="last-name" id="last-name" placeholder="Last Name" required>
+                    </label>
+                    
+                </div>
+
+                <label for="email-address">Email Address</label>
+                <input type="email" name="email-address" id="email-address" placeholder="Email Address" required>
+
+                <label for="phone-number">Phone Number</label>
+                <input type="tel" name="phone-number" id="phone-number">
+
+            </fieldset>
+
+            <fieldset>
+                <h2>Driver's License Information</h2>
+
+                <label for="license">License Number</label>
+                <input type="text" name="license" id="license" placeholder="License Number" required>
+
+                <label for="state">State</label>
+                <select name="state" id="state">
+                    <option value="" selected>Select a State</option>
+                </select>
+
+                <label for="province">Province of Issue</label>
+                <input type="text" name="province" id="province" placeholder="Province">
+
+                <label for="expiry">Expiry Date</label>
+                <input type="date" name="expiry" id="expiry">
+            </fieldset>
+
+            <fieldset>
+                <h2>Payment Information</h2>
+
+                <label for="card-number">Credit or Debit Card Number</label>
+                <input type="tel" name="card-number" id="card-number" inputmode="numeric" pattern="[0-9\s]{13,19}" autocomplete="card-number" maxlength="19" placeholder="xxxx xxxx xxxx xxxx">
+
+                <label for="billing-address">Billing Address</label>
+                <input type="text" name="billing-address" id="billing-address" placeholder="Billing Address">
+
+                <label for="card-expiry">Expiration Date</label>
+                <input type="month" name="card-expiry" id="card-expiry" >
+            </fieldset>
+
+            <fieldset>
+                <h2>Rental Preferences</h2>
+
+                <label for="vehicle-pref">Vehicle Preference</label>
+                <input type="text" name="vehicle-pref" id="vehicle-pref">
+
+                <label for="duration">
+                    Rental Duration
+                    <input type="number" name="duration" id="duration">
+                    days
+                </label>
+
+                <label for="locations">Pickup/Drop-off Locations</label>
+                <input type="text" name="locations" id="locations" placeholder="Separate locations by commas">
+                
+            </fieldset>
+
+            <small>We'll never share your customer information for profit</small>
+          
+            <!-- Button -->
+            <button type="submit">Submit</button>
+        </form>
+    </main>
+</body>
+    
+</body>
+</html>
