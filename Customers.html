@@ -10,11 +10,22 @@
 
 <body>
     <header class="container">
-        <h1>Customer Information</h1>
+        <nav>
+            <ul>
+              <li><strong>Customer Information</strong></li>
+            </ul>
+            <ul>
+              <li><a href="Vehicles.html">Vehicles</a></li>
+              <li><a href="Customers.html" role="button">Customer</a></li>
+              <li><a href="rentals.html">Rentals & Returns</a></li>
+              <li><a href="reports.html">Reports</a></li>
+            </ul>
+          </nav>
     </header>
 
     <main class="container">
         <form>
+            <h1>Customer Information</h1>
             <fieldset>
                 <h2>Contact Information</h2>
                 
@@ -78,9 +89,9 @@
                 <input type="text" name="vehicle-pref" id="vehicle-pref">
 
                 <label for="duration">
-                    Rental Duration
+                    Rental Duration (days)
                     <input type="number" name="duration" id="duration">
-                    days
+                    
                 </label>
 
                 <label for="locations">Pickup/Drop-off Locations</label>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/pico.min.css"> 
+    <style>
+        .hide {
+            display: none;
+        }
+    </style>
+    <title>Rentals and Returns</title>
+</head>
+<body>
+    
+    <header class="container">
+        <nav>
+            <ul>
+              <li><strong>Customer Information</strong></li>
+            </ul>
+            <ul>
+              <li><a href="Vehicles.html">Vehicles</a></li>
+              <li><a href="Customers.html">Customer</a></li>
+              <li><a href="rentals.html">Rentals & Returns</a></li>
+              <li><a href="reports.html" role="button">Reports</a></li>
+            </ul>
+          </nav>
+    </header>
+
+
+    <main class="container">
+        <h1>Reports</h1>
+        <label for="reports">Select Type of report</label>
+        <select name="reports" id="reports">
+            <option value="0" selected>Select Report</option>
+            <option value="vehicle-rental">Vehicle Rental History</option>
+            <option value="customer-rental">Customer Rental History</option>
+            <option value="rental-history">Rental History Report</option>
+            <option value="vehicle-availablity">Vehicle Availibility </option>
+            <option value="late-return">Late Return Report</option>
+            <option value="vehicle-turnover">Vehicle Turnover Report</option>
+        </select>
+
+        <div class="vehicle-rental grid">
+            <label for="vehicle">Select Vehicle
+                <select name="vehicle" id="vehicle"></select>
+            </label>
+            <div></div>
+            <div></div>
+        </div>
+
+        <div class="customer-rental grid">
+            <label for="customer">Select Customer
+                <select name="customer" id="customer"></select>
+            </label>
+            <div></div>
+            <div></div>
+        </div>
+
+        <div class="rental-history">
+            <div class="grid">
+                <label for="start-date">Start Date: 
+                    <input type="date" name="" id="end-date">
+                </label>
+                <label for="end-date">End Date: 
+                    <input type="date" name="end-date" id="end-date">
+                </label>
+                <div></div>
+            </div>
+        </div>
+
+
+        <div>
+            <table role="grid">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Heading</th>
+                    <th scope="col">Heading</th>
+                    <th scope="col">Heading</th>
+                    <th scope="col">Heading</th>
+                    <th scope="col">Heading</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>Cell</td>
+                    <td>Cell</td>
+                    <td>Cell</td>
+                    <td>Cell</td>
+                    <td>Cell</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>Cell</td>
+                    <td>Cell</td>
+                    <td>Cell</td>
+                    <td>Cell</td>
+                    <td>Cell</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>Cell</td>
+                    <td>Cell</td>
+                    <td>Cell</td>
+                    <td>Cell</td>
+                    <td>Cell</td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th scope="col">#</th>
+                    <td scope="col">Total</td>
+                    <td scope="col">Total</td>
+                    <td scope="col">Total</td>
+                    <td scope="col">Total</td>
+                    <td scope="col">Total</td>
+                  </tr>
+                </tfoot>
+              </table>
+        </div>
+    </main>
+
+    <script>
+        window.addEventListener('load', hideAllReportOptions)
+        function hideAllReportOptions() {
+            let d1 = document.querySelector('.vehicle-rental');
+            let d2 = document.querySelector('.customer-rental');
+            let d3 = document.querySelector('.rental-history');
+            d1.classList.add('hide');
+            d2.classList.add('hide');
+            d3.classList.add('hide');
+        }
+
+        let report = document.querySelector('#reports');
+        report.addEventListener('change', (e) => {
+            hideAllReportOptions();
+            if (report.value == '0') {
+                return;
+            }
+
+            document.querySelector("."+report.value).classList.remove('hide');
+        });
+    </script>
+</body>
+</html>
