@@ -1,36 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/pico.min.css">
+    <link rel="stylesheet" href="css/custom.css">
     <style>
         .hide {
             display: none;
         }
-    </style> 
+    </style>
+
     <title>Rentals and Returns</title>
 </head>
 
 <body>
-    
+
     <header class="container">
         <nav>
             <ul>
-              <li><strong>Rentals & Returns</strong></li>
+                <li><strong>Rentals & Returns</strong></li>
             </ul>
             <ul>
-              <li><a href="Vehicles.html">Vehicles</a></li>
-              <li><a href="Customers.html" >Customer</a></li>
-              <li><a href="rentals.html" role="button">Rentals & Returns</a></li>
-              <li><a href="reports.html">Reports</a></li>
+                <li><a href="Vehicles.html">Vehicles</a></li>
+                <li><a href="Customers.html">Customer</a></li>
+                <li><a href="rentals.html" role="button">Rentals & Returns</a></li>
+                <li><a href="reports.html">Reports</a></li>
             </ul>
-          </nav>
+        </nav>
     </header>
 
     <main class="container">
-        
+
         <select name="form-type" id="form-type">
             <option value="0">Rentals</option>
             <option value="1">Returns</option>
@@ -42,33 +45,34 @@
 
                 <label for="license">Select Driver's License Number</label>
                 <select name="license" id="license"></select>
-                
+
                 <div class="grid">
                     <label for="first-name">
                         First Name
                         <input type="text" name="first-name" id="first-name" placeholder="First Name" required>
                     </label>
-                    
+
                     <label for="last-name">
                         Last Name
                         <input type="text" name="last-name" id="last-name" placeholder="Last Name" required>
                     </label>
-                    
+
                 </div>
 
                 <div class="grid">
                     <label for="email-address">Email Address
-                        <input type="email" name="email-address" id="email-address" placeholder="Email Address" required>
+                        <input type="email" name="email-address" id="email-address" placeholder="Email Address"
+                            required>
                     </label>
-                    
-    
+
+
                     <label for="phone-number">Phone Number
                         <input type="tel" name="phone-number" id="phone-number">
                     </label>
                 </div>
 
-                
-                
+
+
 
             </fieldset>
 
@@ -85,11 +89,11 @@
                         Make
                         <input type="text" id="Make" name="Make" placeholder="Make" required>
                     </label>
-    
+
                     <label for="Model">
                         Model
                         <input type="text" id="Model" name="Model" placeholder="Model" required>
-                    </label>   
+                    </label>
                 </div>
 
                 <label for="year">Year</label>
@@ -98,7 +102,7 @@
                 <div class="grid">
                     <label for="interior-color">Interior Color</label>
                     <input type="text" name="interior-color" id="interior-color" placeholder="Interior Color">
-    
+
                     <label for="exterior-color">Exterior color</label>
                     <input type="text" name="exterior-color" id="exterior-color" placeholder="Exterior Color">
                 </div>
@@ -121,7 +125,7 @@
                 <input type="text" name="rental-rate" id="rental-rate">
 
                 <label for="additional-fees">Additional Fees</label>
-                <input type="text" name="additional-fees" id="additional-fees">                            
+                <input type="text" name="additional-fees" id="additional-fees">
             </fieldset>
 
 
@@ -141,10 +145,10 @@
                 <label for="actual-return-date">Actual Return Date</label>
                 <input type="date" name="actual-return-date" id="actual-return-date">
 
-                
+
 
                 <label for="outstanding">Additional fees: <span id="additional-fees-show"></span></label>
-                
+
             </fieldset>
 
             <fieldset>
@@ -152,7 +156,7 @@
                 <label for="existing-damage">Existing Damage: <span id="existing-damage"></span></label>
 
                 <label for="new-damage" class="returns hide">New damage</label>
-                <textarea name="new-damage" id="new-damage" cols="30" rows="10" class="returns hide"></textarea>       
+                <textarea name="new-damage" id="new-damage" cols="30" rows="10" class="returns hide"></textarea>
             </fieldset>
 
             <fieldset class="returns hide">
@@ -163,11 +167,11 @@
                 <label for="payment-method">Payment Method: <span id="payment-method"></span></label>
 
                 <label for="outstanding-fees">Outstanding Fees: <span id="outstanding-fees"></span></label>
-                
+
             </fieldset>
 
             <small>We'll never share your customer information for profit</small>
-          
+
             <!-- Button -->
             <button type="submit">Submit</button>
         </form>
@@ -176,6 +180,9 @@
 
     <script>
         let input_type = document.querySelector("#form-type");
+        var form = document.querySelector('form');
+        let license = document.getElementById('license');
+
         input_type.addEventListener('change', (e) => {
             let returns = document.querySelectorAll('.returns');
             let rentals = document.querySelectorAll('.rentals');
@@ -195,12 +202,126 @@
                 for (let index = 0; index < returns.length; index++) {
                     returns[index].classList.remove('hide');
                 }
-
-                
             }
         });
+
+        form.addEventListener('submit', SaveData)
+        function SaveData(e) {
+            let formData = new FormData(form);
+            fetch("php/...", {
+                method: 'post',
+                body: formData
+            })
+                .then(res => res.text())
+                .then((data) => {
+                    window.location.reload(true);
+                })
+        }
+
+        function autocomplete(inp, arr) {
+            var currentFocus;
+            inp.addEventListener("input", function (e) {
+                var list, b, i, val = this.value;
+                closeAllLists();
+                if (!val) { return false; }
+                currentFocus = -1;
+                list = document.createElement("DIV");
+                list.setAttribute("id", this.id + "autocomplete-list");
+                list.setAttribute("class", "autocomplete-items");
+
+                this.parentNode.appendChild(list);
+
+                let formData = new FormData(form);
+                fetch("php/...", {
+                    method: 'post',
+                    body: formData
+                })
+                    .then(res => res.text())
+                    .then((data) => {
+                        window.location.reload(true);
+                    })
+
+                for (i = 0; i < arr.length; i++) {
+                    /*check if the item starts with the same letters as the text field value:*/
+                    if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                        /*create a DIV element for each matching element:*/
+                        b = document.createElement("DIV");
+                        /*make the matching letters bold:*/
+                        b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                        b.innerHTML += arr[i].substr(val.length);
+                        /*insert a input field that will hold the current array item's value:*/
+                        b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                        /*execute a function when someone clicks on the item value (DIV element):*/
+                        b.addEventListener("click", function (e) {
+                            /*insert the value for the autocomplete text field:*/
+                            inp.value = this.getElementsByTagName("input")[0].value;
+                            /*close the list of autocompleted values,
+                            (or any other open lists of autocompleted values:*/
+                            closeAllLists();
+                        });
+                        list.appendChild(b);
+                    }
+                }
+            });
+            /*execute a function presses a key on the keyboard:*/
+            inp.addEventListener("keydown", function (e) {
+                var x = document.getElementById(this.id + "autocomplete-list");
+                if (x) x = x.getElementsByTagName("div");
+                if (e.keyCode == 40) {
+                    /*If the arrow DOWN key is pressed,
+                    increase the currentFocus variable:*/
+                    currentFocus++;
+                    /*and and make the current item more visible:*/
+                    addActive(x);
+                } else if (e.keyCode == 38) { //up
+                    /*If the arrow UP key is pressed,
+                    decrease the currentFocus variable:*/
+                    currentFocus--;
+                    /*and and make the current item more visible:*/
+                    addActive(x);
+                } else if (e.keyCode == 13) {
+                    /*If the ENTER key is pressed, prevent the form from being submitted,*/
+                    e.preventDefault();
+                    if (currentFocus > -1) {
+                        /*and simulate a click on the "active" item:*/
+                        if (x) x[currentFocus].click();
+                    }
+                }
+            });
+            function addActive(x) {
+                /*a function to classify an item as "active":*/
+                if (!x) return false;
+                /*start by removing the "active" class on all items:*/
+                removeActive(x);
+                if (currentFocus >= x.length) currentFocus = 0;
+                if (currentFocus < 0) currentFocus = (x.length - 1);
+                /*add class "autocomplete-active":*/
+                x[currentFocus].classList.add("autocomplete-active");
+            }
+            function removeActive(x) {
+                /*a function to remove the "active" class from all autocomplete items:*/
+                for (var i = 0; i < x.length; i++) {
+                    x[i].classList.remove("autocomplete-active");
+                }
+            }
+            function closeAllLists(elmnt) {
+                /*close all autocomplete lists in the document,
+                except the one passed as an argument:*/
+                var x = document.getElementsByClassName("autocomplete-items");
+                for (var i = 0; i < x.length; i++) {
+                    if (elmnt != x[i] && elmnt != inp) {
+                        x[i].parentNode.removeChild(x[i]);
+                    }
+                }
+            }
+            /*execute a function when someone clicks in the document:*/
+            document.addEventListener("click", function (e) {
+                closeAllLists(e.target);
+            });
+        }
     </script>
 </body>
-    
+
 </body>
+
 </html>

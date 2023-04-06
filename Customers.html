@@ -47,7 +47,7 @@
                 <input type="email" name="email-address" id="email-address" placeholder="Email Address" required>
 
                 <label for="phone-number">Phone Number</label>
-                <input type="tel" name="phone-number" id="phone-number">
+                <input type="tel" name="phone-number" id="phone-number" max="11" required>
 
             </fieldset>
 
@@ -57,45 +57,45 @@
                 <label for="license">License Number</label>
                 <input type="text" name="license" id="license" placeholder="License Number" required>
 
-                <label for="state">State</label>
-                <select name="state" id="state">
-                    <option value="" selected>Select a State</option>
+                <label for="parish">Parish</label>
+                <select name="parish" id="parish">
+                    <option value="" selected>Select a Parish</option>
                 </select>
 
-                <label for="province">Province of Issue</label>
-                <input type="text" name="province" id="province" placeholder="Province">
+                <label for="district">District</label>
+                <input type="text" name="district" id="district" placeholder="District" required>
 
                 <label for="expiry">Expiry Date</label>
-                <input type="date" name="expiry" id="expiry">
+                <input type="date" name="expiry" id="expiry" required>
             </fieldset>
 
             <fieldset>
                 <h2>Payment Information</h2>
 
                 <label for="card-number">Credit or Debit Card Number</label>
-                <input type="tel" name="card-number" id="card-number" inputmode="numeric" pattern="[0-9\s]{13,19}" autocomplete="card-number" maxlength="19" placeholder="xxxx xxxx xxxx xxxx">
+                <input type="tel" name="card-number" id="card-number" inputmode="numeric" pattern="[0-9\s]{13,19}" autocomplete="card-number" maxlength="19" placeholder="xxxx xxxx xxxx xxxx" required>
 
                 <label for="billing-address">Billing Address</label>
-                <input type="text" name="billing-address" id="billing-address" placeholder="Billing Address">
+                <input type="text" name="billing-address" id="billing-address" placeholder="Billing Address" required>
 
                 <label for="card-expiry">Expiration Date</label>
-                <input type="month" name="card-expiry" id="card-expiry" >
+                <input type="month" name="card-expiry" min="2023-05" id="card-expiry" required>
             </fieldset>
 
             <fieldset>
                 <h2>Rental Preferences</h2>
 
                 <label for="vehicle-pref">Vehicle Preference</label>
-                <input type="text" name="vehicle-pref" id="vehicle-pref">
+                <input type="text" name="vehicle-pref" id="vehicle-pref" required>
 
                 <label for="duration">
                     Rental Duration (days)
-                    <input type="number" name="duration" id="duration">
+                    <input type="number" name="duration" min="0" id="duration" required>
                     
                 </label>
 
                 <label for="locations">Pickup/Drop-off Locations</label>
-                <input type="text" name="locations" id="locations" placeholder="Separate locations by commas">
+                <input type="text" name="locations" id="locations" placeholder="Separate locations by commas" required>
                 
             </fieldset>
 
@@ -105,6 +105,24 @@
             <button type="submit">Submit</button>
         </form>
     </main>
+
+    <script>
+        var form = document.querySelector('form');
+
+        form.addEventListener('submit',SaveData)
+        function SaveData(e) {
+            let formData = new FormData(form);
+            fetch("php/...", {
+                method: 'post',
+                body: formData
+            })
+                .then(res => res.text())
+                .then((data) => {
+                    window.location.reload(true);
+                })
+                
+        }
+    </script>
 </body>
     
 </body>

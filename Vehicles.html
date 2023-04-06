@@ -7,24 +7,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/pico.min.css">
     <title>Vehicle</title>
+
+    <script>
+
+    </script>
 </head>
 
-<body> 
+<body>
     <header class="container">
         <nav>
             <ul>
-              <li><strong>Customer Information</strong></li>
+                <li><strong>Vehicle Information</strong></li>
             </ul>
             <ul>
-              <li><a href="Vehicles.html" role="button">Vehicles</a></li>
-              <li><a href="Customers.html" >Customer</a></li>
-              <li><a href="rentals.html" >Rentals & Returns</a></li>
-              <li><a href="reports.html">Reports</a></li>
+                <li><a href="Vehicles.html" role="button">Vehicles</a></li>
+                <li><a href="Customers.html">Customer</a></li>
+                <li><a href="rentals.html">Rentals & Returns</a></li>
+                <li><a href="reports.html">Reports</a></li>
             </ul>
-          </nav>
+        </nav>
     </header>
     <main class="container">
-        <form>
+        <form id="vehicle-form">
 
             <!-- Grid -->
             <div class="grid">
@@ -44,17 +48,21 @@
 
             <!-- Markup example 2: input is after label -->
             <label for="year">Year</label>
-            <input type="date" name="year" id="year" required>
+            <input type="number" name="year" id="year" min="1980" max='2025' required>
 
             <label for="VIN">VIN</label>
-            <input type="text" name="VIN" id="VIN" placeholder="VIN" required>
+            <input type="text" name="VIN" id="VIN" placeholder="VIN" minlength="17" maxlength="17" required>
 
             <div class="grid">
-                <label for="interior-color">Interior Color</label>
-                <input type="text" name="interior-color" id="interior-color" placeholder="Interior Color">
+                <label for="interior-color">Interior Color
+                    <input type="text" name="interior-color" id="interior-color" placeholder="Interior Color" required>
+                </label>
 
-                <label for="exterior-color">Exterior color</label>
-                <input type="text" name="exterior-color" id="exterior-color" placeholder="Exterior Color">
+
+                <label for="exterior-color">Exterior color
+                    <input type="text" name="exterior-color" id="exterior-color" placeholder="Exterior Color">
+                </label>
+
             </div>
 
             <label for="license">License Plate Number</label>
@@ -62,7 +70,7 @@
 
             <label for="odometer">Odometer Reading</label>
             <input type="number" name="odometer" id="odometer">
-            
+
 
             <fieldset>
                 <legend>Availability</legend>
@@ -92,6 +100,73 @@
 
         </form>
     </main>
+
+    <script>
+        var VIN = document.getElementById('VIN');
+        let car_year = document.getElementById('year');
+        var form = document.querySelector('form');
+
+        VIN.addEventListener('input', check_VIN_Valid);;
+        function check_VIN_Valid(evt) {
+            if (VIN.value.length != 17) {
+                VIN.setAttribute('aria-invalid', true);
+            }
+            else {
+                VIN.setAttribute('aria-invalid', false);
+            }
+
+        }
+
+        car_year.addEventListener('input', checkValidYear);
+        function checkValidYear(evt) {
+            year = car_year.value;
+            if (year >= 1980 && year <= yearRangeEnd()) {
+                car_year.setAttribute('aria-invalid', false);
+            }
+            else {
+                car_year.setAttribute('aria-invalid', true);
+            }
+        }
+
+
+        form.addEventListener('submit',SaveData)
+        function SaveData(e) {
+            let formData = new FormData(form);
+            fetch("php/...", {
+                method: 'post',
+                body: formData
+            })
+                .then(res => res.text())
+                .then((data) => {
+                    window.location.reload(true);
+                })
+                
+        }
+
+
+        function yearRangeEnd() {
+            return new Date().getFullYear() + 2; // year range ends at current year + 2
+        }
+
+        /**
+         * let formData = new FormData()
+    formData.append('salesno', '')
+    formData.append('salesdate', '')
+    formData.append('salestotal', summary.toFixed(2))
+    formData.append('items', JSON.stringify(transaction))
+	
+    fetch("php/addSale.php", {
+        method: 'post',
+        body: formData
+    })
+        .then(res => res.text())
+        .then((data) => {
+            window.location.reload(true);
+        })
+         */
+
+
+    </script>
 </body>
 
 </html>
