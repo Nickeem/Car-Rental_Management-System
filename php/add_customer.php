@@ -19,6 +19,9 @@ $driver_license_expiry_date = $_POST['expiry'];
 $credit_card_number = $_POST['card-number'];
 $billing_address = $_POST['billing-address'];
 $billing_expiry_date = $_POST['card-expiry'];
+//convert the card expiry date to a date format
+$billing_expiry_date = date('Y-m-01', strtotime($billing_expiry_date)); //convert to the first day of the month
+
 
 // prepare the SQL statement
 $sql = "INSERT INTO customers (name, address, email, phone_number, driver_license_number, parish, district, driver_license_expiry_date, credit_card_number, billing_address, billing_expiry_date) VALUES ('$name', '$address', '$email', '$phone_number', '$driver_license_number', '$parish', '$district', '$driver_license_expiry_date', '$credit_card_number', '$billing_address', '$billing_expiry_date')";
