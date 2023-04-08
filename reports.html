@@ -195,9 +195,10 @@
       })
           .then(res => res.json())
           .then((data) => {
+
               let counter = 1;
               var body = document.createElement('tbody');
-              array.forEach(element => {
+              data.forEach(element => {
                 let row = document.createElement('tr');
                 let th = document.createElement('th');
                 th.setAttribute('scope', 'row');
@@ -221,7 +222,13 @@
       table.innerHTML = '';
     }
     function getHead(headers) {
-      
+      let header = document.createElement('thead');
+      let tr = document.createElement('tr');
+      headers.forEach(value => {
+        let td = document.createElement('td');
+        td.innerHTML = value;
+        tr.appendChild(td);
+      });
     }
   </script>
 </body>

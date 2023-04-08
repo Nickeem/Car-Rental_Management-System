@@ -218,52 +218,43 @@
                 })
         }
 
-        function autocomplete(inp, arr) {
+        function autocomplete(inp) { // this function should bring up suggestions for license plate no and License number based on user input
             var currentFocus;
             inp.addEventListener("input", function (e) {
                 var list, b, i, val = this.value;
                 closeAllLists();
                 if (!val) { return false; }
                 currentFocus = -1;
-                list = document.createElement("DIV");
+                list = document.createElement("div");
                 list.setAttribute("id", this.id + "autocomplete-list");
                 list.setAttribute("class", "autocomplete-items");
 
                 this.parentNode.appendChild(list);
 
-                let formData = new FormData(form);
+                let formData = new FormData();
+                formData.append('pattern', e.value);
                 fetch("php/...", {
                     method: 'post',
                     body: formData
                 })
                     .then(res => res.json())
                     .then((data) => {
-                        for (i = 0; i < arr.length; i++) {
-                    /*check if the item starts with the same letters as the text field value:*/
-                    if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-                        /*create a DIV element for each matching element:*/
-                        b = document.createElement("DIV");
-                        /*make the matching letters bold:*/
-                        b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-                        b.innerHTML += arr[i].substr(val.length);
-                        /*insert a input field that will hold the current array item's value:*/
-                        b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
-                        /*execute a function when someone clicks on the item value (DIV element):*/
-                        b.addEventListener("click", function (e) {
-                            /*insert the value for the autocomplete text field:*/
-                            inp.value = this.getElementsByTagName("input")[0].value;
-                            /*close the list of autocompleted values,
-                            (or any other open lists of autocompleted values:*/
-                            closeAllLists();
-                        });
-                        list.appendChild(b);
-                    }
-                }
-                    })
+                        for (i = 0; i < data.length; i++) {
+                            /*check if the item starts with the same letters as the text field value:*/
 
-                
+                                b = document.createElement("DIV");
+                                b.innerHTML = data[i]['Model'];
+                                b.innerHTML += "<input type='hidden' value='" + data[i]['Model'] + "'>";
+
+                                b.addEventListener("click", function (e) {
+                                    inp.value = this.getElementsByTagName("input")[0].value;
+                                    closeAllLists();
+                                });
+                                list.appendChild(b);
+                        }
+                    })
             });
-            
+
             function closeAllLists(elmnt) {
                 /*close all autocomplete lists in the document,
                 except the one passed as an argument:*/

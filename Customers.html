@@ -47,7 +47,7 @@
                 <input type="email" name="email-address" id="email-address" placeholder="Email Address" required>
 
                 <label for="phone-number">Phone Number</label>
-                <input type="tel" name="phone-number" id="phone-number" max="11" required>
+                <input type="tel" name="phone-number" id="phone-number" minlength="7" maxlength="11" required>
 
             </fieldset>
 
@@ -55,11 +55,22 @@
                 <h2>Driver's License Information</h2>
 
                 <label for="license">License Number</label>
-                <input type="text" name="license" id="license" placeholder="License Number" required>
+                <input type="text" name="license" id="license" placeholder="License Number" minlength="15" maxlength="15" required>
 
                 <label for="parish">Parish</label>
                 <select name="parish" id="parish">
                     <option value="" selected>Select a Parish</option>
+                    <option value="Christ Church">Christ Church</option>
+                    <option value="St. Philip">St. Philip</option>
+                    <option value="St. Michael">St. Michael</option>
+                    <option value="St. James">St. James</option>
+                    <option value="St. Peter">St. Peter</option>
+                    <option value="St. John">St. John</option>
+                    <option value="St. George">St. George</option>
+                    <option value="St. Thomas">St. Thomas</option>
+                    <option value="St. Andrew">St. Andrew</option>
+                    <option value="St. Joesph">St. Joesph</option>
+                    <option value="St. Lucy">St. Lucy</option>
                 </select>
 
                 <label for="district">District</label>
@@ -105,8 +116,8 @@
             <button type="submit">Submit</button>
         </form>
     </main>
-
     <script>
+
         var form = document.querySelector('form');
 
         form.addEventListener('submit',SaveData)
@@ -118,7 +129,7 @@
             })
                 .then(res => res.text())
                 .then((data) => {
-                    window.location.reload(true);
+                    
                 })
                 
         }
