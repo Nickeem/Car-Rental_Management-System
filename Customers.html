@@ -60,6 +60,11 @@
                 <label for="parish">Parish</label>
                 <select name="parish" id="parish">
                     <option value="" selected>Select a Parish</option>
+                    <option value="Clarendon">Clarendon</option>
+                    <option value="Hanover">Hanover</option>
+                    <option value="Kingston">Kingston</option>
+                    <option value="Manchester">Manchester</option>
+                    <option value="Portland">Portland</option>
                 </select>
 
                 <label for="district">District</label>
@@ -111,17 +116,23 @@
 
         form.addEventListener('submit',SaveData)
         function SaveData(e) {
+            e.preventDefault();
             let formData = new FormData(form);
-            fetch("php/...", {
+            fetch("php/add_customer.php", {
                 method: 'post',
                 body: formData
             })
                 .then(res => res.text())
                 .then((data) => {
+                    console.log("Form submission successful!");
+                    console.log(data);
                     window.location.reload(true);
                 })
-                
+                .catch((error) => {
+                    console.error("Form submission error: ", error);
+                });
         }
+
     </script>
 </body>
     
