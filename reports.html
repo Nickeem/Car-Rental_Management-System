@@ -1,148 +1,229 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/pico.min.css"> 
-    <style>
-        .hide {
-            display: none;
-        }
-    </style>
-    <title>Rentals and Returns</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/pico.min.css">
+  <style>
+    .hide {
+      display: none;
+    }
+  </style>
+  <title>Rentals and Returns</title>
 </head>
+
 <body>
+
+  <header class="container">
+    <nav>
+      <ul>
+        <li><strong>Customer Information</strong></li>
+      </ul>
+      <ul>
+        <li><a href="Vehicles.html">Vehicles</a></li>
+        <li><a href="Customers.html">Customer</a></li>
+        <li><a href="rentals.html">Rentals & Returns</a></li>
+        <li><a href="reports.html" role="button">Reports</a></li>
+      </ul>
+    </nav>
+  </header>
+
+
+  <main class="container">
+    <h1>Reports</h1>
+    <label for="reports">Select Type of report</label>
+    <select name="reports" id="reports">
+      <option value="0" selected>Select Report</option>
+      <option value="vehicle-rental">Vehicle Rental History</option>
+      <option value="customer-rental">Customer Rental History</option>
+      <option value="rental-history">Rental History Report</option>
+      <option value="vehicle-availablity">Vehicle Availibility </option>
+      <option value="late-return">Late Return Report</option>
+      <option value="vehicle-turnover">Vehicle Turnover Report</option>
+    </select>
+
+    <div class="vehicle-rental grid">
+      <label for="vehicle">Select Vehicle
+        <select name="vehicle" id="vehicle"></select>
+      </label>
+      <div></div>
+      <div></div>
+    </div>
+
+    <div class="customer-rental grid">
+      <label for="customer">Select Customer
+        <select name="customer" id="customer"></select>
+      </label>
+      <div></div>
+      <div></div>
+    </div>
+
+    <div class="rental-history">
+      <div class="grid">
+        <label for="start-date">Start Date:
+          <input type="date" name="" id="end-date">
+        </label>
+        <label for="end-date">End Date:
+          <input type="date" name="end-date" id="end-date">
+        </label>
+        <div></div>
+      </div>
+    </div>
+
+
+    <div>
+      <table role="grid">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Heading</th>
+            <th scope="col">Heading</th>
+            <th scope="col">Heading</th>
+            <th scope="col">Heading</th>
+            <th scope="col">Heading</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Cell</td>
+            <td>Cell</td>
+            <td>Cell</td>
+            <td>Cell</td>
+            <td>Cell</td>
+          </tr>
+          <tr>
+            <th scope="row">1</th>
+            <td>Cell</td>
+            <td>Cell</td>
+            <td>Cell</td>
+            <td>Cell</td>
+            <td>Cell</td>
+          </tr>
+          <tr>
+            <th scope="row">1</th>
+            <td>Cell</td>
+            <td>Cell</td>
+            <td>Cell</td>
+            <td>Cell</td>
+            <td>Cell</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th scope="col">#</th>
+            <td scope="col">Total</td>
+            <td scope="col">Total</td>
+            <td scope="col">Total</td>
+            <td scope="col">Total</td>
+            <td scope="col">Total</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    var reports = document.getElementById('reports');
+    var table = document.querySelector('table');
+
+    window.addEventListener('load', hideAllReportOptions)
+    function hideAllReportOptions() {
+      let d1 = document.querySelector('.vehicle-rental');
+      let d2 = document.querySelector('.customer-rental');
+      let d3 = document.querySelector('.rental-history');
+      d1.classList.add('hide');
+      d2.classList.add('hide');
+      d3.classList.add('hide');
+    }
+
+    let report = document.querySelector('#reports');
+    report.addEventListener('change', (e) => {
+      hideAllReportOptions();
+      if (report.value == '0') {
+        return;
+      }
+      document.querySelector("." + report.value).classList.remove('hide');
+    });
     
-    <header class="container">
-        <nav>
-            <ul>
-              <li><strong>Customer Information</strong></li>
-            </ul>
-            <ul>
-              <li><a href="Vehicles.html">Vehicles</a></li>
-              <li><a href="Customers.html">Customer</a></li>
-              <li><a href="rentals.html">Rentals & Returns</a></li>
-              <li><a href="reports.html" role="button">Reports</a></li>
-            </ul>
-          </nav>
-    </header>
+    reports.addEventListener('change', );
+    function updateTable(evt) {
+      let php_files = ['vehicle_rental.php', 'customer-rental.php', 'rental-history.php', 'vehicle-availablity.php', 'late-return.php', 'vehicle-turnover.php']
+      let index = 0;
+      var head;
+      switch (evt.value) {
+        case 'vehicle-rental':
+          index = 0;
+          head = getHead(['']);
+          break;
+          
+        case 'customer-rental':
+          index = 1;
+          break;
+        case 'rental-history':
+          index = 2;
+          break;
 
+        case 'rental-history':
+          index = 3;
+          break;
 
-    <main class="container">
-        <h1>Reports</h1>
-        <label for="reports">Select Type of report</label>
-        <select name="reports" id="reports">
-            <option value="0" selected>Select Report</option>
-            <option value="vehicle-rental">Vehicle Rental History</option>
-            <option value="customer-rental">Customer Rental History</option>
-            <option value="rental-history">Rental History Report</option>
-            <option value="vehicle-availablity">Vehicle Availibility </option>
-            <option value="late-return">Late Return Report</option>
-            <option value="vehicle-turnover">Vehicle Turnover Report</option>
-        </select>
+        case 'vehicle-availablity':
+          index = 4;
+          break;
 
-        <div class="vehicle-rental grid">
-            <label for="vehicle">Select Vehicle
-                <select name="vehicle" id="vehicle"></select>
-            </label>
-            <div></div>
-            <div></div>
-        </div>
+        case 'late-return':
+          index = 5;
+          break;
+        
+        case 'vehicle-turnover':
+          index = 6;
+          break;
+      
+        default:
+          index = 0;
+          return;
+          break;
+      }
+      clearTable();
+      
+      fetch(php_files[index], {
+          method: 'post',
+          body: formData
+      })
+          .then(res => res.json())
+          .then((data) => {
+              let counter = 1;
+              var body = document.createElement('tbody');
+              array.forEach(element => {
+                let row = document.createElement('tr');
+                let th = document.createElement('th');
+                th.setAttribute('scope', 'row');
+                th.innerHTML = counter++;
+                row.append(th);
+                for (const [key, value] of Object.entries(element)) {
+                  let col = document.createElement('td');
+                  col.innerHTML = value;
+                  row.appendChild(col);
+                }
+                body.appendChild(row);
+              });
+              table.appendChild(body);
+          })
+                
+        
 
-        <div class="customer-rental grid">
-            <label for="customer">Select Customer
-                <select name="customer" id="customer"></select>
-            </label>
-            <div></div>
-            <div></div>
-        </div>
-
-        <div class="rental-history">
-            <div class="grid">
-                <label for="start-date">Start Date: 
-                    <input type="date" name="" id="end-date">
-                </label>
-                <label for="end-date">End Date: 
-                    <input type="date" name="end-date" id="end-date">
-                </label>
-                <div></div>
-            </div>
-        </div>
-
-
-        <div>
-            <table role="grid">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Heading</th>
-                    <th scope="col">Heading</th>
-                    <th scope="col">Heading</th>
-                    <th scope="col">Heading</th>
-                    <th scope="col">Heading</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                    <td>Cell</td>
-                  </tr>
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <th scope="col">#</th>
-                    <td scope="col">Total</td>
-                    <td scope="col">Total</td>
-                    <td scope="col">Total</td>
-                    <td scope="col">Total</td>
-                    <td scope="col">Total</td>
-                  </tr>
-                </tfoot>
-              </table>
-        </div>
-    </main>
-
-    <script>
-        window.addEventListener('load', hideAllReportOptions)
-        function hideAllReportOptions() {
-            let d1 = document.querySelector('.vehicle-rental');
-            let d2 = document.querySelector('.customer-rental');
-            let d3 = document.querySelector('.rental-history');
-            d1.classList.add('hide');
-            d2.classList.add('hide');
-            d3.classList.add('hide');
-        }
-
-        let report = document.querySelector('#reports');
-        report.addEventListener('change', (e) => {
-            hideAllReportOptions();
-            if (report.value == '0') {
-                return;
-            }
-
-            document.querySelector("."+report.value).classList.remove('hide');
-        });
-    </script>
+      
+    }
+    function clearTable() {
+      table.innerHTML = '';
+    }
+    function getHead(headers) {
+      
+    }
+  </script>
 </body>
+
 </html>
