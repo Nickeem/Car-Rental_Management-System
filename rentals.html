@@ -82,8 +82,12 @@
             <fieldset>
                 <h2>Vehicle Information</h2>
 
-                <label for="license-plate">License Plate Number</label>
-                <select name="licence-plate" id="licence-plate">
+                <div class="autocomplete">
+                    <label for="license-plate">License Plate Number</label>
+                    <input type="text" name="license-plate" id="licence-plate">
+                </div>
+                
+
                     <option value=""></option>
                 </select>
 
@@ -241,29 +245,42 @@
 
                 let formData = new FormData();
                 formData.append('pattern', e.value);
-                fetch("php/...", {
+                let php_files = ['LicensePlateNumber.php','DriversLicenseNumber.php'] // just example file names
+                var field_to_get = ['license_plate_number', 'driver_license_number']; // name of fields in sql table
+                
+                var index = 0; // index of php file to use
+                
+                if (inp.getAttribute('id') == 'license') { // drivers license number is being input to
+                    index = 1; // select index from php files to file to get drivers License numbers & which field to get from data returned
+                } 
+                else if (inp.getAttribute('id') == 'license-plate') { // license plate is being updated to 
+                    index = 0;
+                }
+                fetch("php/"+php_files[index], {
                     method: 'post',
                     body: formData
                 })
                     .then(res => res.json())
                     .then((data) => {
                         for (i = 0; i < data.length; i++) {
-                            /*check if the item starts with the same letters as the text field value:*/
-
-                            b = document.createElement("div");
-                            b.innerHTML = data[i]['Model'];
-                            b.innerHTML += "<input type='hidden' value='" + data[i]['Model'] + "'>";
+                            // based on the data received from query
+                            // as long as there are more than 1 results
+                            b = document.createElement("div"); // create a div to hold each result
+                            b.innerHTML = data[i]['Model']; // from each result in data get 
+                            // put each result returned of driver's license value or license plate number into hidden input value
+                            b.innerHTML += "<input type='hidden' value='" + data[i][field_to_get[index]] + "'>"; 
 
                             b.addEventListener("click", function (e) {
-                                inp.value = this.getElementsByTagName("input")[0].value;
-                                closeAllLists();
+                                // when option is selected from suggestion list, update value in input box
+                                inp.value = this.getElementsByTagName("input")[0].value; 
+                                closeAllLists(); // close seletions when value is selected
                             });
-                            list.appendChild(b);
+                            list.appendChild(b); // append each selection to suggestion list
                         }
                     })
             });
 
-            function closeAllLists(elmnt) {
+            function closeAllLists(elmnt) {  // close list with all suggestions
                 /*close all autocomplete lists in the document,
                 except the one passed as an argument:*/
                 var x = document.getElementsByClassName("autocomplete-items");
@@ -278,6 +295,7 @@
                 closeAllLists(e.target);
             });
         }
+        autocomplete(license);
         autocomplete(license);
     </script>
 </body>
