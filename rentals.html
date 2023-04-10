@@ -83,9 +83,8 @@
                 <h2>Vehicle Information</h2>
 
                 <label for="license-plate">License Plate Number</label>
-                <select name="licence-plate" id="licence-plate">
-                    <option value=""></option>
-                </select>
+                <input type="text" name="license-plate" id="license-plate" class="autocomplete" placeholder="License Plate Number">
+
 
                 <div class="grid">
                     <label for="Make">
@@ -100,7 +99,8 @@
                 </div>
 
                 <label for="year">Year</label>
-                <input type="date" name="year" id="year" required>
+                <input type="number" name="year" id="year" required>
+
 
                 <div class="grid">
                     <label for="interior-color">Interior Color</label>
@@ -184,7 +184,7 @@
     <script>
         var input_type = document.querySelector("#form-type");
         var form = document.querySelector('form');
-        let license = document.getElementById('license');
+        //let license = document.getElementById('license');
 
         input_type.addEventListener('change', (e) => {
             let returns = document.querySelectorAll('.returns');
@@ -209,12 +209,20 @@
         });
 
         form.addEventListener('submit', SaveData)
-        function SaveData(e) {
+        async function SaveData(e) {
+            e.preventDefault();
+
+            let customerId = await getCustomerId(document.getElementById('email-address').value);
+            let vehicleId = await getVehicleId(document.getElementById('license-plate').value);
+
             let formData = new FormData(form);
-            let php_files = ["rentals.php", "returns.php"]
+            formData.append('customer_id', customerId);
+            formData.append('vehicle_id', vehicleId);
+
+            let php_files = ["rentals.php", "returns.php"];
             let index = 0; // default to rental.php
             if (input_type.value == "1") {
-                let index = 1;
+                index = 1;
             }
             fetch("php/" + php_files[index], {
                 method: 'post',
@@ -223,46 +231,12 @@
                 .then(res => res.text())
                 .then((data) => {
                     window.location.reload(true);
-                })
+                });
         }
 
-        function autocomplete(inp) {
-            var currentFocus;
-            inp.addEventListener("input", function (e) {
-                var list, b, i, val = this.value;
-                closeAllLists();
-                if (!val) { return false; }
-                currentFocus = -1;
-                list = document.createElement("div");
-                list.setAttribute("id", this.id + "autocomplete-list");
-                list.setAttribute("class", "autocomplete-items");
 
-                this.parentNode.appendChild(list);
 
-                let formData = new FormData();
-                formData.append('pattern', val);
-                fetch("php/fetch_license.php", {
-                    method: 'post',
-                    body: formData
-                })
-                    .then(res => res.json())
-                    .then((data) => {
-                        for (i = 0; i < data.length; i++) {
-                            b = document.createElement("div");
-                            b.innerHTML = data[i]['driver_license_number'];
-                            b.innerHTML += "<input type='hidden' value='" + data[i]['driver_license_number'] + "'>";
-
-                            b.addEventListener("click", function (e) {
-                                inp.value = this.getElementsByTagName("input")[0].value;
-                                fetchOtherFields(inp.value);
-                                closeAllLists();
-                            });
-                            list.appendChild(b);
-                        }
-                    })
-            });
-
-            function fetchOtherFields(license) {
+        function fetchOtherFields(license) {
                 let formData = new FormData();
                 formData.append('license', license);
                 fetch("php/fetch_other_fields.php", {
@@ -280,7 +254,68 @@
                         }
                     });
             }
+            function fetchVehicleFields(licensePlate) {
+                let formData = new FormData();
+                formData.append('license_plate', licensePlate);
+                fetch("php/fetch_vehicle_fields.php", {
+                    method: 'post',
+                    body: formData
+                })
+                    .then(res => res.json())
+                    .then((data) => {
+                        if (data.length > 0) {
+                            document.getElementById('Make').value = data[0]['make'];
+                            document.getElementById('Model').value = data[0]['model'];
+                            document.getElementById('year').value = data[0]['year'];
+                            document.getElementById('interior-color').value = data[0]['interior_color'];
+                            document.getElementById('exterior-color').value = data[0]['exterior_color'];
+                        }
+                    });
+            }
 
+
+
+        function autocomplete(inp, type) {
+            var currentFocus;
+            inp.addEventListener("input", function (e) {
+                var list, b, i, val = this.value;
+                closeAllLists();
+                if (!val) { return false; }
+                currentFocus = -1;
+                list = document.createElement("div");
+                list.setAttribute("id", this.id + "autocomplete-list");
+                list.setAttribute("class", "autocomplete-items");
+
+                this.parentNode.appendChild(list);
+
+                let formData = new FormData();
+                formData.append('pattern', val);
+                let fetchUrl = type === 'customer' ? "php/fetch_license.php" : "php/fetch_license_plates.php";
+                fetch(fetchUrl, {
+                    method: 'post',
+                    body: formData
+                })
+                    .then(res => res.json())
+                    .then((data) => {
+                        for (i = 0; i < data.length; i++) {
+                            b = document.createElement("div");
+                            let idValue = type === 'customer' ? data[i]['driver_license_number'] : data[i]['license_plate_number'];
+                            b.innerHTML = idValue;
+                            b.innerHTML += "<input type='hidden' value='" + idValue + "'>";
+
+                            b.addEventListener("click", function (e) {
+                                inp.value = this.getElementsByTagName("input")[0].value;
+                                if (type === 'customer') {
+                                    fetchOtherFields(inp.value);
+                                } else {
+                                    fetchVehicleFields(inp.value);
+                                }
+                                closeAllLists();
+                            });
+                            list.appendChild(b);
+                        }
+                    })
+            });
 
             function closeAllLists(elmnt) {
                 var x = document.getElementsByClassName("autocomplete-items");
@@ -295,7 +330,44 @@
                 closeAllLists(e.target);
             });
         }
-        autocomplete(license);
+
+        let license = document.getElementById('license');
+        autocomplete(license, 'customer');
+
+        let licensePlate = document.getElementById('license-plate');
+        autocomplete(licensePlate, 'vehicle');
+
+
+        function getCustomerId(email) {
+            return new Promise((resolve, reject) => {
+                let formData = new FormData();
+                formData.append('email', email);
+                fetch("php/get_customer_id.php", {
+                    method: 'post',
+                    body: formData
+                })
+                    .then(res => res.json())
+                    .then((data) => {
+                        resolve(data.id);
+                    });
+            });
+        }
+
+        function getVehicleId(licensePlate) {
+            return new Promise((resolve, reject) => {
+                let formData = new FormData();
+                formData.append('license_plate', licensePlate);
+                fetch("php/get_vehicle_id.php", {
+                    method: 'post',
+                    body: formData
+                })
+                    .then(res => res.json())
+                    .then((data) => {
+                        resolve(data.id);
+                    });
+            });
+        }
+
 
     </script>
 </body>
