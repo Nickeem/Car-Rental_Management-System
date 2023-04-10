@@ -43,8 +43,11 @@
             <fieldset>
                 <h2>Customer Information</h2>
 
-                <label for="license">Select Driver's License Number</label>
-                <select name="license" id="license"></select>
+                <div class="autocomplete">
+                    <label for="license">Select Driver's License Number</label>
+                    <input type="text" name="license" id="license" placeholder="Driver License Number">
+                </div>
+
 
                 <div class="grid">
                     <label for="first-name">
@@ -179,7 +182,7 @@
 
 
     <script>
-        let input_type = document.querySelector("#form-type");
+        var input_type = document.querySelector("#form-type");
         var form = document.querySelector('form');
         let license = document.getElementById('license');
 
@@ -208,7 +211,12 @@
         form.addEventListener('submit', SaveData)
         function SaveData(e) {
             let formData = new FormData(form);
-            fetch("php/...", {
+            let php_files = ["rentals.php", "returns.php"]
+            let index = 0; // default to rental.php
+            if(input_type.value == "1") {
+                let index = 1;
+            }
+            fetch("php/"+php_files[index], {
                 method: 'post',
                 body: formData
             })
@@ -222,8 +230,8 @@
             var currentFocus;
             inp.addEventListener("input", function (e) {
                 var list, b, i, val = this.value;
-                closeAllLists();
-                if (!val) { return false; }
+                closeAllLists(); // close suggestions
+                if (!val) { return false; } // if value is empty don't continue
                 currentFocus = -1;
                 list = document.createElement("div");
                 list.setAttribute("id", this.id + "autocomplete-list");
@@ -242,15 +250,15 @@
                         for (i = 0; i < data.length; i++) {
                             /*check if the item starts with the same letters as the text field value:*/
 
-                                b = document.createElement("DIV");
-                                b.innerHTML = data[i]['Model'];
-                                b.innerHTML += "<input type='hidden' value='" + data[i]['Model'] + "'>";
+                            b = document.createElement("div");
+                            b.innerHTML = data[i]['Model'];
+                            b.innerHTML += "<input type='hidden' value='" + data[i]['Model'] + "'>";
 
-                                b.addEventListener("click", function (e) {
-                                    inp.value = this.getElementsByTagName("input")[0].value;
-                                    closeAllLists();
-                                });
-                                list.appendChild(b);
+                            b.addEventListener("click", function (e) {
+                                inp.value = this.getElementsByTagName("input")[0].value;
+                                closeAllLists();
+                            });
+                            list.appendChild(b);
                         }
                     })
             });
@@ -270,6 +278,7 @@
                 closeAllLists(e.target);
             });
         }
+        autocomplete(license);
     </script>
 </body>
 
