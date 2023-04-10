@@ -213,10 +213,10 @@
             let formData = new FormData(form);
             let php_files = ["rentals.php", "returns.php"]
             let index = 0; // default to rental.php
-            if(input_type.value == "1") {
+            if (input_type.value == "1") {
                 let index = 1;
             }
-            fetch("php/"+php_files[index], {
+            fetch("php/" + php_files[index], {
                 method: 'post',
                 body: formData
             })
@@ -280,8 +280,6 @@
         }
         autocomplete(license);
     </script>
-</body>
-
 </body>
 
 </html>

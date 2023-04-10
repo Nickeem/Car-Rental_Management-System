@@ -156,7 +156,6 @@
       switch (evt.value) {
         case 'vehicle-rental':
           index = 0;
-          head = getHead(['']);
           break;
           
         case 'customer-rental':
@@ -198,23 +197,26 @@
 
               let counter = 1;
               var body = document.createElement('tbody');
-              data.forEach(element => {
+              let head = getHead(Object.keys(data[0])); // get field names from data
+              
+              data.forEach(element => { // for each element in array object
                 let row = document.createElement('tr');
                 let th = document.createElement('th');
                 th.setAttribute('scope', 'row');
-                th.innerHTML = counter++;
+                th.innerHTML = counter++; // display row number and increment for next row
                 row.append(th);
                 for (const [key, value] of Object.entries(element)) {
+                  // lopp through each row of the results
                   let col = document.createElement('td');
                   col.innerHTML = value;
                   row.appendChild(col);
                 }
                 body.appendChild(row);
               });
+
+              table.appendChild(head);
               table.appendChild(body);
           })
-                
-        
 
       
     }
