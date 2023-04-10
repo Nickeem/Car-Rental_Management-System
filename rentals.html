@@ -226,12 +226,12 @@
                 })
         }
 
-        function autocomplete(inp) { // this function should bring up suggestions for license plate no and License number based on user input
+        function autocomplete(inp) {
             var currentFocus;
             inp.addEventListener("input", function (e) {
                 var list, b, i, val = this.value;
-                closeAllLists(); // close suggestions
-                if (!val) { return false; } // if value is empty don't continue
+                closeAllLists();
+                if (!val) { return false; }
                 currentFocus = -1;
                 list = document.createElement("div");
                 list.setAttribute("id", this.id + "autocomplete-list");
@@ -240,22 +240,21 @@
                 this.parentNode.appendChild(list);
 
                 let formData = new FormData();
-                formData.append('pattern', e.value);
-                fetch("php/...", {
+                formData.append('pattern', val);
+                fetch("php/fetch_license.php", {
                     method: 'post',
                     body: formData
                 })
                     .then(res => res.json())
                     .then((data) => {
                         for (i = 0; i < data.length; i++) {
-                            /*check if the item starts with the same letters as the text field value:*/
-
                             b = document.createElement("div");
-                            b.innerHTML = data[i]['Model'];
-                            b.innerHTML += "<input type='hidden' value='" + data[i]['Model'] + "'>";
+                            b.innerHTML = data[i]['driver_license_number'];
+                            b.innerHTML += "<input type='hidden' value='" + data[i]['driver_license_number'] + "'>";
 
                             b.addEventListener("click", function (e) {
                                 inp.value = this.getElementsByTagName("input")[0].value;
+                                fetchOtherFields(inp.value);
                                 closeAllLists();
                             });
                             list.appendChild(b);
@@ -263,9 +262,27 @@
                     })
             });
 
+            function fetchOtherFields(license) {
+                let formData = new FormData();
+                formData.append('license', license);
+                fetch("php/fetch_other_fields.php", {
+                    method: 'post',
+                    body: formData
+                })
+                    .then(res => res.json())
+                    .then((data) => {
+                        if (data.length > 0) {
+                            document.getElementById('first-name').value = data[0]['first_name'];
+                            document.getElementById('last-name').value = data[0]['last_name'];
+                            // Add the following two lines
+                            document.getElementById('email-address').value = data[0]['email'];
+                            document.getElementById('phone-number').value = data[0]['phone_number'];
+                        }
+                    });
+            }
+
+
             function closeAllLists(elmnt) {
-                /*close all autocomplete lists in the document,
-                except the one passed as an argument:*/
                 var x = document.getElementsByClassName("autocomplete-items");
                 for (var i = 0; i < x.length; i++) {
                     if (elmnt != x[i] && elmnt != inp) {
@@ -273,12 +290,13 @@
                     }
                 }
             }
-            /*execute a function when someone clicks in the document:*/
+
             document.addEventListener("click", function (e) {
                 closeAllLists(e.target);
             });
         }
         autocomplete(license);
+
     </script>
 </body>
 
