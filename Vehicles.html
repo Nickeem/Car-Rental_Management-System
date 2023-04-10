@@ -133,16 +133,21 @@
 
         form.addEventListener('submit',SaveData)
         function SaveData(e) {
+            e.preventDefault();
             let formData = new FormData(form);
-            fetch("php/...", {
+            fetch("php/add_vehicle.php", {
                 method: 'post',
                 body: formData
             })
                 .then(res => res.text())
                 .then((data) => {
+                    console.log("Form submission successful!");
+                    console.log(data);
                     window.location.reload(true);
                 })
-                
+                .catch((error) => {
+                    console.error("Form submission error: ", error);
+                });
         }
 
 
