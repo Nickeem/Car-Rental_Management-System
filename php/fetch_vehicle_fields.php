@@ -7,7 +7,7 @@ if (!$conn) {
 
 $license_plate = $_POST['license_plate'];
 
-$query = "SELECT * FROM vehicles WHERE license_plate_number = '$license_plate'";
+$query = "SELECT * FROM vehicles WHERE license_plate_number LIKE '$license_plate%'";
 $result = mysqli_query($conn, $query);
 
 $data = array();

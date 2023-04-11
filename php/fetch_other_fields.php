@@ -9,7 +9,7 @@ if (!$conn) {
 
 $license = $_POST['license'];
 
-$query = "SELECT * FROM customers WHERE driver_license_number = '$license'";
+$query = "SELECT * FROM customers WHERE driver_license_number LIKE '$license%'";
 $result = mysqli_query($conn, $query);
 
 $data = array();
