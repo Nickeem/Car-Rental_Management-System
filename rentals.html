@@ -104,7 +104,8 @@
                 </div>
 
                 <label for="year">Year</label>
-                <input type="date" name="year" id="year" required>
+                <input type="number" name="year" id="year" required>
+
 
                 <div class="grid">
                     <label for="interior-color">Interior Color</label>
@@ -188,7 +189,7 @@
     <script>
         var input_type = document.querySelector("#form-type");
         var form = document.querySelector('form');
-        let license = document.getElementById('license');
+        //let license = document.getElementById('license');
 
         input_type.addEventListener('change', (e) => {
             let returns = document.querySelectorAll('.returns');
@@ -213,14 +214,19 @@
         });
 
         form.addEventListener('submit', SaveData)
-        function SaveData(e) {
+        async function SaveData(e) {
+            e.preventDefault();
+
+            let customerId = await getCustomerId(document.getElementById('email-address').value);
+            let vehicleId = await getVehicleId(document.getElementById('license-plate').value);
+
             let formData = new FormData(form);
             formData.append('customer_id', document.getElementById('email-address'));
             formData.append('vehicle_id', document.getElementById('license'));
             let php_files = ["rentals.php", "returns.php"]
             let index = 0; // default to rental.php
             if (input_type.value == "1") {
-                let index = 1;
+                index = 1;
             }
             fetch("php/" + php_files[index], {
                 method: 'post',
@@ -229,15 +235,56 @@
                 .then(res => res.text())
                 .then((data) => {
                     window.location.reload(true);
-                })
+                });
         }
 
-        function autocomplete(inp) { // this function should bring up suggestions for license plate no and License number based on user input
+
+
+        function fetchOtherFields(license) {
+                let formData = new FormData();
+                formData.append('license', license);
+                fetch("php/fetch_other_fields.php", {
+                    method: 'post',
+                    body: formData
+                })
+                    .then(res => res.json())
+                    .then((data) => {
+                        if (data.length > 0) {
+                            document.getElementById('first-name').value = data[0]['first_name'];
+                            document.getElementById('last-name').value = data[0]['last_name'];
+                            // Add the following two lines
+                            document.getElementById('email-address').value = data[0]['email'];
+                            document.getElementById('phone-number').value = data[0]['phone_number'];
+                        }
+                    });
+            }
+            function fetchVehicleFields(licensePlate) {
+                let formData = new FormData();
+                formData.append('license_plate', licensePlate);
+                fetch("php/fetch_vehicle_fields.php", {
+                    method: 'post',
+                    body: formData
+                })
+                    .then(res => res.json())
+                    .then((data) => {
+                        if (data.length > 0) {
+                            document.getElementById('Make').value = data[0]['make'];
+                            document.getElementById('Model').value = data[0]['model'];
+                            document.getElementById('year').value = data[0]['year'];
+                            document.getElementById('interior-color').value = data[0]['interior_color'];
+                            document.getElementById('exterior-color').value = data[0]['exterior_color'];
+                        }
+                    });
+            }
+
+
+
+        function autocomplete(inp, type) {
             var currentFocus;
             inp.addEventListener("input", function (e) {
                 var list, b, i, val = this.value;
-                closeAllLists(); // close suggestions
-                if (!val) { return false; } // if value is empty don't continue
+                closeAllLists();
+                if (!val) { return false; }
                 currentFocus = -1;
                 list = document.createElement("div");
                 list.setAttribute("id", this.id + "autocomplete-list");
@@ -294,7 +341,7 @@
                     }
                 }
             }
-            /*execute a function when someone clicks in the document:*/
+
             document.addEventListener("click", function (e) {
                 closeAllLists(e.target);
             });

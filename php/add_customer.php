@@ -8,8 +8,8 @@ if (!$conn) {
 }
 
 // retrieve data from the form
-$name = $_POST['first-name'] . ' ' . $_POST['last-name'];
-$address = $_POST['address'];
+$first_name = $_POST['first-name'];
+$last_name = $_POST['last-name'];
 $email = $_POST['email-address'];
 $phone_number = $_POST['phone-number'];
 $driver_license_number = $_POST['license'];
@@ -24,7 +24,7 @@ $billing_expiry_date = date('Y-m-01', strtotime($billing_expiry_date)); //conver
 
 
 // prepare the SQL statement
-$sql = "INSERT INTO customers (name, address, email, phone_number, driver_license_number, parish, district, driver_license_expiry_date, credit_card_number, billing_address, billing_expiry_date) VALUES ('$name', '$address', '$email', '$phone_number', '$driver_license_number', '$parish', '$district', '$driver_license_expiry_date', '$credit_card_number', '$billing_address', '$billing_expiry_date')";
+$sql = "INSERT INTO customers (first_name,last_name,email, phone_number, driver_license_number, parish, district, driver_license_expiry_date, credit_card_number, billing_address, billing_expiry_date) VALUES ('$first_name', '$last_name', '$email', '$phone_number', '$driver_license_number', '$parish', '$district', '$driver_license_expiry_date', '$credit_card_number', '$billing_address', '$billing_expiry_date')";
 
 // execute the SQL statement
 if (mysqli_query($conn, $sql)) {
