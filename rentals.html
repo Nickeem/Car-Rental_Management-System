@@ -215,6 +215,8 @@
         form.addEventListener('submit', SaveData)
         function SaveData(e) {
             let formData = new FormData(form);
+            formData.append('customer_id', document.getElementById('email-address'));
+            formData.append('vehicle_id', document.getElementById('license'));
             let php_files = ["rentals.php", "returns.php"]
             let index = 0; // default to rental.php
             if (input_type.value == "1") {
@@ -247,6 +249,7 @@
                 formData.append('pattern', e.value);
                 let php_files = ['LicensePlateNumber.php','DriversLicenseNumber.php'] // just example file names
                 var field_to_get = ['license_plate_number', 'driver_license_number']; // name of fields in sql table
+                var fill_functions = [fetchVehicleFields, fetchCustomerFields];
                 
                 var index = 0; // index of php file to use
                 
@@ -273,6 +276,7 @@
                             b.addEventListener("click", function (e) {
                                 // when option is selected from suggestion list, update value in input box
                                 inp.value = this.getElementsByTagName("input")[0].value; 
+                                fill_functions[index](inp.value);
                                 closeAllLists(); // close seletions when value is selected
                             });
                             list.appendChild(b); // append each selection to suggestion list
@@ -295,6 +299,45 @@
                 closeAllLists(e.target);
             });
         }
+
+        function fetchCustomerFields(license) {
+            let formData = new FormData();
+            formData.append('license', license);
+            fetch("php/fetch_other_fields.php", {
+                method: 'post',
+                body: formData
+            })
+                .then(res => res.json())
+                .then((data) => {
+                    if (data.length > 0) {
+                        document.getElementById('first-name').value = data[0]['first_name'];
+                        document.getElementById('last-name').value = data[0]['last_name'];
+                        document.getElementById('email-address').value = data[0]['email'];
+                        document.getElementById('phone-number').value = data[0]['phone_number'];
+                    }
+                });
+        }
+
+            function fetchVehicleFields(licensePlate) {
+                let formData = new FormData();
+                formData.append('license_plate', licensePlate);
+                fetch("php/fetch_vehicle_fields.php", {
+                    method: 'post',
+                    body: formData
+                })
+                    .then(res => res.json())
+                    .then((data) => {
+                        if (data.length > 0) {
+                            document.getElementById('Make').value = data[0]['make'];
+                            document.getElementById('Model').value = data[0]['model'];
+                            document.getElementById('year').value = data[0]['year'];
+                            document.getElementById('interior-color').value = data[0]['interior_color'];
+                            document.getElementById('exterior-color').value = data[0]['exterior_color'];
+                        }
+                    });
+            }
+        
+
         autocomplete(license);
         autocomplete(license);
     </script>
