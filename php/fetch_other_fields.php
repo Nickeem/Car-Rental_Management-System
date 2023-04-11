@@ -8,8 +8,9 @@ if (!$conn) {
 }
 
 $license = $_POST['license'];
+$limit = 5;
 
-$query = "SELECT * FROM customers WHERE driver_license_number LIKE '$license%'";
+$query = "SELECT * FROM customers WHERE driver_license_number LIKE '$license%' LIMIT $limit";
 $result = mysqli_query($conn, $query);
 
 $data = array();

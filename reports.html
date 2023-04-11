@@ -44,33 +44,37 @@
       <option value="vehicle-turnover">Vehicle Turnover Report</option>
     </select>
 
-    <div class="vehicle-rental grid">
-      <label for="vehicle">Select Vehicle
-        <select name="vehicle" id="vehicle"></select>
-      </label>
-      <div></div>
-      <div></div>
-    </div>
 
-    <div class="customer-rental grid">
-      <label for="customer">Select Customer
-        <select name="customer" id="customer"></select>
-      </label>
-      <div></div>
-      <div></div>
-    </div>
-
-    <div class="rental-history">
-      <div class="grid">
-        <label for="start-date">Start Date:
-          <input type="date" name="" id="end-date">
-        </label>
-        <label for="end-date">End Date:
-          <input type="date" name="end-date" id="end-date">
-        </label>
+    <form>
+      <div class="vehicle-rental autocomplete">
+        <label for="license-plate">Enter Vehicle License Plate Number</label>
+        <input type="text" name="license-plate" id="licence-plate" placeholder="Vehicle License Plate">
         <div></div>
       </div>
-    </div>
+  
+      <div class="customer-rental autocomplete">
+        <label for="license">Enter Customer Driver's License Number</label>
+        <input type="text" name="license" id="license" placeholder="Driver License Number">
+        <div></div>
+      </div>
+  
+      <div class="rental-history">
+        <div class="grid">
+          <label for="start-date">Start Date:
+            <input type="date" name="start-date" id="start-date">
+          </label>
+          <label for="end-date">End Date:
+            <input type="date" name="end-date" id="end-date">
+          </label>
+          <div></div>
+        </div>
+      </div>
+
+      <!-- Button -->
+      <button type="submit">Submit</button>
+    </form>
+
+    
 
 
     <div>
@@ -131,12 +135,16 @@
 
     window.addEventListener('load', hideAllReportOptions)
     function hideAllReportOptions() {
-      let d1 = document.querySelector('.vehicle-rental');
-      let d2 = document.querySelector('.customer-rental');
-      let d3 = document.querySelector('.rental-history');
-      d1.classList.add('hide');
-      d2.classList.add('hide');
-      d3.classList.add('hide');
+      // hide certain inputs
+      document.querySelector('.vehicle-rental').classList.add('hide');
+      document.querySelector('.customer-rental').classList.add('hide');
+      document.querySelector('.rental-history').classList.add('hide');
+      // make all inputs not required
+      document.querySelector('.vehicle-rental input').required = false;
+      document.querySelector('.customer-rental input').required = false;
+      document.querySelectorAll('.rental-history input')[0].required = false;
+      document.querySelectorAll('.rental-history input')[1].required = false;
+
     }
 
     let report = document.querySelector('#reports');
@@ -145,40 +153,53 @@
       if (report.value == '0') {
         return;
       }
-      document.querySelector("." + report.value).classList.remove('hide');
+      document.querySelector(`.${report.value}`).classList.remove('hide');
+
+      let inputs = document.querySelectorAll(`.${report.value} input`); // make input box in selected report input true
+      for (let index = 0; index < inputs.length; index++) {
+        inputs[index].required = true;
+        
+      }
     });
     
-    reports.addEventListener('change', );
+    reports.addEventListener('submit', updateTable);
+
     function updateTable(evt) {
-      let php_files = ['vehicle_rental.php', 'customer-rental.php', 'rental-history.php', 'vehicle-availablity.php', 'late-return.php', 'vehicle-turnover.php']
+      let php_files = ['vehicle_rental.php', 'customer_rental.php', 'rental_history.php', 'vehicle_availablity.php', 'late_return.php', 'vehicle_turnover.php']
       let index = 0;
       var head;
+      var formdata = new FormData();
       switch (evt.value) {
         case 'vehicle-rental':
+          let licence_plate = document.getElementById('license-plate').value;
+          formdata.append('license_plate', licence_plate);
           index = 0;
           break;
           
         case 'customer-rental':
+          let drivers_license = document.getElementById('license').value;
+          formdata.append('license', drivers_license);
           index = 1;
           break;
         case 'rental-history':
+        let startDate = document.getElementById('start-date').value;
+        let endDate = document.getElementById('end-date').value;
+          formdata.append('start_date', startDate);
+          formdata.append('end_date', endDate);
           index = 2;
           break;
 
-        case 'rental-history':
+
+        case 'vehicle-availablity':
           index = 3;
           break;
 
-        case 'vehicle-availablity':
-          index = 4;
-          break;
-
         case 'late-return':
-          index = 5;
+          index = 4;
           break;
         
         case 'vehicle-turnover':
-          index = 6;
+          index = 5;
           break;
       
         default:
@@ -232,6 +253,76 @@
         tr.appendChild(td);
       });
     }
+
+
+    // code for auto complete
+    function autocomplete(inp, type) {
+            var currentFocus;
+            inp.addEventListener("input", function (e) {
+                var list, b, i, val = this.value;
+                closeAllLists();
+                if (!val) { return false; }
+                currentFocus = -1;
+                list = document.createElement("div");
+                list.setAttribute("id", this.id + "autocomplete-list");
+                list.setAttribute("class", "autocomplete-items");
+
+                this.parentNode.appendChild(list);
+
+                let formData = new FormData();
+                formData.append('pattern', e.value);
+                let php_files = ['LicensePlateNumber.php','DriversLicenseNumber.php'] // just example file names
+                var field_to_get = ['license_plate_number', 'driver_license_number']; // name of fields in sql table
+                var fill_functions = [fetchVehicleFields, fetchCustomerFields];
+                
+                var index = 0; // index of php file to use
+                
+                if (inp.getAttribute('id') == 'license') { // drivers license number is being input to
+                    index = 1; // select index from php files to file to get drivers License numbers & which field to get from data returned
+                } 
+                else if (inp.getAttribute('id') == 'license-plate') { // license plate is being updated to 
+                    index = 0;
+                }
+                fetch("php/"+php_files[index], {
+                    method: 'post',
+                    body: formData
+                })
+                    .then(res => res.json())
+                    .then((data) => {
+                        for (i = 0; i < data.length; i++) {
+                            // based on the data received from query
+                            // as long as there are more than 1 results
+                            b = document.createElement("div"); // create a div to hold each result
+                            b.innerHTML = data[i]['Model']; // from each result in data get 
+                            // put each result returned of driver's license value or license plate number into hidden input value
+                            b.innerHTML += "<input type='hidden' value='" + data[i][field_to_get[index]] + "'>"; 
+
+                            b.addEventListener("click", function (e) {
+                                // when option is selected from suggestion list, update value in input box
+                                inp.value = this.getElementsByTagName("input")[0].value; 
+                                closeAllLists(); // close seletions when value is selected
+                            });
+                            list.appendChild(b); // append each selection to suggestion list
+                        }
+                    })
+            });
+
+            function closeAllLists(elmnt) {  // close list with all suggestions
+                /*close all autocomplete lists in the document,
+                except the one passed as an argument:*/
+                var x = document.getElementsByClassName("autocomplete-items");
+                for (var i = 0; i < x.length; i++) {
+                    if (elmnt != x[i] && elmnt != inp) {
+                        x[i].parentNode.removeChild(x[i]);
+                    }
+                }
+            }
+
+            document.addEventListener("click", function (e) {
+                closeAllLists(e.target);
+            });
+        }
+
   </script>
 </body>
 

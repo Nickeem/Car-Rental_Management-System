@@ -7,7 +7,9 @@ if (!$conn) {
 
 $license_plate = $_POST['license_plate'];
 
-$query = "SELECT * FROM vehicles WHERE license_plate_number LIKE '$license_plate%'";
+$limit = 5;
+
+$query = "SELECT * FROM vehicles WHERE license_plate_number LIKE '$license_plate%' LIMIT $limit";
 $result = mysqli_query($conn, $query);
 
 $data = array();
