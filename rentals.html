@@ -189,7 +189,8 @@
     <script>
         var input_type = document.querySelector("#form-type");
         var form = document.querySelector('form');
-        //let license = document.getElementById('license');
+        var license = document.getElementById('license');
+        var license_plate = document.getElementById('license-plate');
 
         input_type.addEventListener('change', (e) => {
             let returns = document.querySelectorAll('.returns');
@@ -386,7 +387,7 @@
         
 
         autocomplete(license);
-        autocomplete(license);
+        autocomplete(license_plate);
     </script>
 </body>
 

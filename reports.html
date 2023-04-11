@@ -132,6 +132,8 @@
   <script>
     var reports = document.getElementById('reports');
     var table = document.querySelector('table');
+    var license = document.getElementById('license');
+    var license_plate = document.getElementById('license-plate');
 
     window.addEventListener('load', hideAllReportOptions)
     function hideAllReportOptions() {
@@ -322,6 +324,9 @@
                 closeAllLists(e.target);
             });
         }
+
+        autocomplete(license);
+        autocomplete(license_plate);
 
   </script>
 </body>
