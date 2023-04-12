@@ -258,13 +258,20 @@
     }
     function getHead(headers) {
       let header = document.createElement('thead');
-      let tr = document.createElement('tr');
+      let th = document.createElement('th');
+      
+      // first header to number records
+      let td = document.createElement('td');
+      td.innerHTML = "Row";
+
+      th.appendChild(td); // header for row number
+
       headers.forEach(value => {
         let td = document.createElement('td');
         td.innerHTML = value;
-        tr.appendChild(td);
+        th.appendChild(td);
       });
-      header.appendChild(tr); // Add this line to append 'tr' to 'header'
+      header.appendChild(th); // Add this line to append 'tr' to 'header'
       return header; // Add this line to return 'header'
     }
 
