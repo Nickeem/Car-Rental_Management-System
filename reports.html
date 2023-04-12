@@ -167,30 +167,29 @@
     reports.addEventListener('submit', updateTable);
 
     function updateTable(evt) {
+      evt.preventDefault();
       let php_files = ['vehicle_rental.php', 'customer_rental.php', 'rental_history.php', 'vehicle_availablity.php', 'late_return.php', 'vehicle_turnover.php']
       let index = 0;
-      var head;
-      var formdata = new FormData();
-      switch (evt.value) {
+      var formData = new FormData();
+      switch (reports.value) {
         case 'vehicle-rental':
           let licence_plate = document.getElementById('license-plate').value;
-          formdata.append('license_plate', licence_plate);
+          formData.append('license_plate', licence_plate);
           index = 0;
           break;
-          
+
         case 'customer-rental':
           let drivers_license = document.getElementById('license').value;
-          formdata.append('license', drivers_license);
+          formData.append('license', drivers_license);
           index = 1;
           break;
         case 'rental-history':
-        let startDate = document.getElementById('start-date').value;
-        let endDate = document.getElementById('end-date').value;
-          formdata.append('start_date', startDate);
-          formdata.append('end_date', endDate);
+          let startDate = document.getElementById('start-date').value;
+          let endDate = document.getElementById('end-date').value;
+          formData.append('start_date', startDate);
+          formData.append('end_date', endDate);
           index = 2;
           break;
-
 
         case 'vehicle-availablity':
           index = 3;
@@ -199,50 +198,49 @@
         case 'late-return':
           index = 4;
           break;
-        
+
         case 'vehicle-turnover':
           index = 5;
           break;
-      
+
         default:
           index = 0;
           return;
           break;
       }
       clearTable();
-      
+
       fetch(php_files[index], {
-          method: 'post',
-          body: formData
+        method: 'post',
+        body: formData
       })
-          .then(res => res.json())
-          .then((data) => {
+              .then(res => res.json())
+              .then((data) => {
+                let counter = 1;
+                var body = document.createElement('tbody');
+                let head = getHead(Object.keys(data[0])); // get field names from data
 
-              let counter = 1;
-              var body = document.createElement('tbody');
-              let head = getHead(Object.keys(data[0])); // get field names from data
-              
-              data.forEach(element => { // for each element in array object
-                let row = document.createElement('tr');
-                let th = document.createElement('th');
-                th.setAttribute('scope', 'row');
-                th.innerHTML = counter++; // display row number and increment for next row
-                row.append(th);
-                for (const [key, value] of Object.entries(element)) {
-                  // lopp through each row of the results
-                  let col = document.createElement('td');
-                  col.innerHTML = value;
-                  row.appendChild(col);
-                }
-                body.appendChild(row);
-              });
+                data.forEach(element => { // for each element in array object
+                  let row = document.createElement('tr');
+                  let th = document.createElement('th');
+                  th.setAttribute('scope', 'row');
+                  th.innerHTML = counter++; // display row number and increment for next row
+                  row.append(th);
+                  for (const [key, value] of Object.entries(element)) {
+                    // loop through each row of the results
+                    let col = document.createElement('td');
+                    col.innerHTML = value;
+                    row.appendChild(col);
+                  }
+                  body.appendChild(row);
+                });
 
-              table.appendChild(head);
-              table.appendChild(body);
-          })
+                table.appendChild(head);
+                table.appendChild(body);
+              })
 
-      
     }
+
     function clearTable() {
       table.innerHTML = '';
     }
