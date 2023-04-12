@@ -315,8 +315,16 @@
                     index = 0;
                 }
 
+                let return_rented = false; // dont return rented vehicles
+                if(input_type.value == "1") {
+                    return_rented = true; // return rented vehicles
+                }
+
+
 
                 formData.append('pattern', inp.value);
+                formData.append('return_rented', return_rented);
+
                 fetch("php/"+php_files[index], {
                     method: 'post',
                     body: formData
