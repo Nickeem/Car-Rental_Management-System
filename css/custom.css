@@ -3,9 +3,9 @@
     /*the container must be positioned relative:*/
     position: relative;
     display: inline-block;
-    color: black;
   }
   .autocomplete-items {
+    color: black;
     position: absolute;
     border: 1px solid hsl(195deg, 90%, 32%);;
     border-bottom: none;

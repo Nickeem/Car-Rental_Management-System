@@ -60,16 +60,16 @@
 
 
                 <label for="exterior-color">Exterior color
-                    <input type="text" name="exterior-color" id="exterior-color" placeholder="Exterior Color">
+                    <input type="text" name="exterior-color" id="exterior-color" placeholder="Exterior Color" required>
                 </label>
 
             </div>
 
             <label for="license">License Plate Number</label>
-            <input type="text" name="license" id="license" placeholder="License Plate Number">
+            <input type="text" name="license" id="license" placeholder="License Plate Number" pattern="^[A-Za-z]{1,2}\d{1,4}$" title="Enter a license with 1 or 2 letters followed by 1 to 4 numbers" required>
 
             <label for="odometer">Odometer Reading</label>
-            <input type="number" name="odometer" id="odometer">
+            <input type="number" name="odometer" id="odometer" min="0" max="999999" required>
 
 
             <!--
