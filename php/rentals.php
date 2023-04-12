@@ -12,16 +12,20 @@ $customer_id = (int) $_POST['customer-id'];
 $vehicle_id = (int) $_POST['vehicle-id'];
 $license = $_POST['license'];
 $license_plate = $_POST['license-plate'];
+$rental_rate = $_POST['rental-rate'];
 
-$rental_start_date = $_POST['rental-start-date'];
-$rental_start_date = strtotime("$rental_start_date");
-$rental_start_date = date('Y-m-d', $rental_start_date);
-
+$rental_start_date = strtotime($_POST['rental-start-date']);
 $rental_end_date = strtotime($_POST['rental-end-date']);
+
+$day_diff = round(($rental_end_date - $rental_start_date) / (60 * 60 * 24));
+
+$rental_start_date = date('Y-m-d', $rental_start_date);
 $rental_end_date = date('Y-m-d', $rental_end_date);
 
-$rental_rate = $_POST['rental-rate'];
-$additional_charges = $_POST['additional-fees'];
+
+$payment_amount = $day_diff * $rental_rate;
+
+//$additional_charges = ;
 $vehicle_condition = ""; // Initialize this variable. You can set it using the appropriate form field.
 
 /*
@@ -48,9 +52,9 @@ $update_query = "UPDATE vehicles SET availability = 'rented' WHERE id = $vehicle
 $result = mysqli_query($conn, $update_query);
 
 // Insert rental record into rentals table
-$sql = "INSERT INTO rentals (customer_id, vehicle_id, rental_start_date, rental_end_date, rental_rate, additional_charges, vehicle_condition) VALUES (?, ?, ?, ?, ?, ?, ?)";
+$sql = "INSERT INTO rentals (customer_id, vehicle_id, rental_start_date, rental_end_date, rental_rate, payment_amount, vehicle_condition, rental_status) VALUES (?, ?, ?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("iisssss", $customer_id, $vehicle_id, $rental_start_date, $rental_end_date, $rental_rate, $additional_charges, $vehicle_condition);
+$stmt->bind_param("iisssss", $customer_id, $vehicle_id, $rental_start_date, $rental_end_date, $rental_rate, $payment_amount, $vehicle_condition, "ongoing");
 $result = $stmt->execute();
 
 if ($result) {

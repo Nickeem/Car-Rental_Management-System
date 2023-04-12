@@ -43,7 +43,7 @@
             <fieldset>
                 <h2>Customer Information</h2>
 
-                <input type="hidden" name="customer-id" id="customer-id">
+                <input type="hidden" name="customer-id" id="customer-id" required>
 
                 <div class="autocomplete">
                     <label for="license">Select Driver's License Number</label>
@@ -84,7 +84,7 @@
             <fieldset>
                 <h2>Vehicle Information</h2>
 
-                <input type="hidden" name="vehicle-id" id="vehicle-id">
+                <input type="hidden" name="vehicle-id" id="vehicle-id" required>
 
                 <div class="autocomplete">
                     <label for="license-plate">License Plate Number</label>
@@ -136,8 +136,7 @@
                 <label for="rental-rate">Rental Rate</label>
                 <input type="text" name="rental-rate" id="rental-rate" required>
 
-                <label for="additional-fees">Additional Fees</label>
-                <input type="text" name="additional-fees" id="additional-fees">
+                
             </fieldset>
 
 
@@ -159,7 +158,8 @@
 
 
 
-                <label for="outstanding">Additional fees: <span id="additional-fees-show"></span></label>
+                <label for="late-fee">Late Fee</label>
+                <input type="number" name="late-fee" id="late-fee" value="0" min="0">
 
             </fieldset>
 
@@ -169,6 +169,11 @@
 
                 <label for="new-damage" class="returns hide">New damage</label>
                 <textarea name="new-damage" id="new-damage" cols="30" rows="10" class="returns hide"></textarea>
+
+                <label for="additional-fees" class="returns hide">Additional Fees
+                    <input type="number" name="additional-fees"  id="additional-fees" min="0" value="0">
+                </label>
+                
             </fieldset>
 
             <fieldset class="returns hide">
@@ -176,7 +181,7 @@
 
                 <label for="amount-charged">Amount Charged: <span id="amount-charged"></span></label>
 
-                <label for="payment-method">Payment Method: <span id="payment-method"></span></label>
+                <label for="payment-method">Payment Method: <span id="payment-method">Credit/Debit</span></label>
 
                 <label for="outstanding-fees">Outstanding Fees: <span id="outstanding-fees"></span></label>
 
@@ -197,7 +202,21 @@
         var license = document.getElementById('license');
         var license_plate = document.getElementById('license-plate');
 
+        button = document.querySelector('button');
+        button.addEventListener('click', (e) => {
+            let vehicle_id = document.querySelector('#vehicle-id');
+            let customer_id = document.querySelector('#customer-id');
+
+            if (vehicle_id.value == "") {
+                alert("Enter valid Vehicle License Plate");
+            }
+            else if (customer_id.value == "") {
+                alert("Enter valid Driver License Number");
+            }
+        });
+
         input_type.addEventListener('change', (e) => {
+            updateReturns();
             let returns = document.querySelectorAll('.returns');
             let rentals = document.querySelectorAll('.rentals');
 
@@ -256,7 +275,7 @@
             })
                 .then(res => res.text())
                 .then((data) => {
-                    window.location.reload(true);
+                   // window.location.reload(true);
                 });
         }
 
@@ -279,8 +298,10 @@
                     .then(res => res.json())
                     .then((data) => {
                         if (data.length > 0) {
+                            console.log(data);
                             document.getElementById('rental-start').value = data[0]['rental_start_date'].split(' ')[0];
                             document.getElementById('rental-end').value = data[0]['rental_end_date'].split(' ')[0];
+                            document.getElementById('amount-charged').innerHTML = data[0]['payment_amount'];
                         }
                     });
             }
