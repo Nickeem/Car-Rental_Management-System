@@ -7,10 +7,10 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-$license = $_POST['license'];
-$license_plate = $_POST['license_plate'];
+$customer_id = (int) $_POST['customer_id'];
+$vehicle_id = (int) $_POST['vehicle_id'];
 
-$query = "SELECT * FROM rentals WHERE driver_license_number LIKE '%$pattern%'";
+$query = "SELECT * FROM rentals WHERE vehicle_id = $vehicle_id AND customer_id = $customer_id;";
 $result = mysqli_query($conn, $query);
 
 $data = array();

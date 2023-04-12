@@ -7,7 +7,7 @@ if (!$conn) {
 
 $pattern = $_POST['pattern'];
 
-$query = "SELECT * FROM vehicles WHERE license_plate_number LIKE '%$pattern%' AND availibility = 'not-rented'";
+$query = "SELECT * FROM vehicles WHERE license_plate_number LIKE '%$pattern%' AND availability = 'not-rented'";
 $result = mysqli_query($conn, $query);
 
 $data = array();

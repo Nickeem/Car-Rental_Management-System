@@ -125,16 +125,16 @@
                 <h2>Rental Aggreement</h2>
 
                 <div class="grid">
-                    <label for="rental-start">Rental Start Date
-                        <input type="date" name="rental-start" id="rental-start">
+                    <label for="rental-start-date">Rental Start Date
+                        <input type="date" name="rental-start-date" id="rental-start-date" required>
                     </label>
                     <label for="rental-end">Rental End Date
-                        <input type="date" name="rental-end" id="rental-end">
+                        <input type="date" name="rental-end-date" id="rental-end-date" required>
                     </label>
                 </div>
 
                 <label for="rental-rate">Rental Rate</label>
-                <input type="text" name="rental-rate" id="rental-rate">
+                <input type="text" name="rental-rate" id="rental-rate" required>
 
                 <label for="additional-fees">Additional Fees</label>
                 <input type="text" name="additional-fees" id="additional-fees">
@@ -239,12 +239,12 @@
         async function SaveData(e) {
             e.preventDefault();
 
-            let customerId = await getCustomerId(document.getElementById('email-address').value);
-            let vehicleId = await getVehicleId(document.getElementById('license-plate').value);
+            //let customerId = await getCustomerId(document.getElementById('email-address').value);
+            //let vehicleId = await getVehicleId(document.getElementById('license-plate').value);
 
             let formData = new FormData(form);
-            formData.append('customer_id', document.getElementById('email-address'));
-            formData.append('vehicle_id', document.getElementById('license'));
+            //formData.append('customer_id', document.getElementById('email-address'));
+            //formData.append('vehicle_id', document.getElementById('license'));
             let php_files = ["rentals.php", "returns.php"]
             let index = 0; // default to rental.php
             if (input_type.value == "1") {
@@ -262,59 +262,16 @@
 
 
 
-        function fetchCustomerFields(license) {
-                let formData = new FormData();
-                formData.append('license', license);
-                fetch("php/fetch_other_fields.php", {
-                    method: 'post',
-                    body: formData
-                })
-                    .then(res => res.json())
-                    .then((data) => {
-                        if (data.length > 0) {
-                            document.getElementById('customer-id').value = data[0]['id'];
-                            updateReturns();
-
-                            document.getElementById('first-name').value = data[0]['first_name'];
-                            document.getElementById('last-name').value = data[0]['last_name'];
-                            
-                            document.getElementById('email-address').value = data[0]['email'];
-                            document.getElementById('phone-number').value = data[0]['phone_number'];
-                        }
-                    });
-            }
-            function fetchVehicleFields(licensePlate) {
-                let formData = new FormData();
-                formData.append('license_plate', licensePlate);
-                fetch("php/fetch_vehicle_fields.php", {
-                    method: 'post',
-                    body: formData
-                })
-                    .then(res => res.json())
-                    .then((data) => {
-                        if (data.length > 0) {
-
-                            document.getElementById('vehicle-id').value = data[0]['id'];
-                            updateReturns();
-
-                            document.getElementById('Make').value = data[0]['make'];
-                            document.getElementById('Model').value = data[0]['model'];
-                            document.getElementById('year').value = data[0]['year'];
-                            document.getElementById('interior-color').value = data[0]['interior_color'];
-                            document.getElementById('exterior-color').value = data[0]['exterior_color'];
-                        }
-                    });
-            }
 
 
         function updateReturns() {
-            let vehicle_id = document.querySelector('.vehicle-id');
-            let customer_id = document.querySelector('.customer-id');
+            let vehicle_id = document.querySelector('#vehicle-id');
+            let customer_id = document.querySelector('#customer-id');
 
             if (vehicle_id.value != '' && customer_id.value != '') {
                 let formData = new FormData();
-                formData.append('vehicle_id', vehicle_id);
-                formData.append('customer_id', customer_id);
+                formData.append('vehicle_id', vehicle_id.value);
+                formData.append('customer_id', customer_id.value);
                 fetch("php/getRental.php", {
                     method: 'post',
                     body: formData
@@ -322,8 +279,8 @@
                     .then(res => res.json())
                     .then((data) => {
                         if (data.length > 0) {
-                            document.getElementById('rental-start').value = data[0]['rental_start_date'];
-                            document.getElementById('rental-end').value = data[0]['rental_end_date'];
+                            document.getElementById('rental-start').value = data[0]['rental_start_date'].split(' ')[0];
+                            document.getElementById('rental-end').value = data[0]['rental_end_date'].split(' ')[0];
                         }
                     });
             }
@@ -412,6 +369,9 @@
                 .then(res => res.json())
                 .then((data) => {
                     if (data.length > 0) {
+                        document.getElementById('customer-id').value = data[0]['id'];
+                        updateReturns();
+
                         document.getElementById('first-name').value = data[0]['first_name'];
                         document.getElementById('last-name').value = data[0]['last_name'];
                         document.getElementById('email-address').value = data[0]['email'];
@@ -430,6 +390,9 @@
                     .then(res => res.json())
                     .then((data) => {
                         if (data.length > 0) {
+                            document.getElementById('vehicle-id').value = data[0]['id'];
+                            updateReturns();
+
                             document.getElementById('Make').value = data[0]['make'];
                             document.getElementById('Model').value = data[0]['model'];
                             document.getElementById('year').value = data[0]['year'];
