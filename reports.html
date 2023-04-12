@@ -172,12 +172,20 @@
 
     function updateTable(evt) {
       evt.preventDefault();
-      let php_files = ['vehicle_rental.php', 'php/customer_rental.php', 'rental_history.php', 'vehicle_availablity.php', 'late_return.php', 'vehicle_turnover.php']
+      let php_files = [
+        'php/vehicle_rental_history.php',
+        'php/customer_rental.php',
+        'php/rental_history_report.php',
+        'php/vehicle_availability.php',
+        'php/late_return.php',
+        'php/vehicle_turnover.php'
+      ];
+
       let index = 0;
       var formData = new FormData();
       switch (reports.value) {
         case 'vehicle-rental':
-          let licence_plate = document.getElementById('license-plate').value;
+          let licence_plate = document.getElementById('licence-plate').value;
           formData.append('license_plate', licence_plate);
           index = 0;
           break;
