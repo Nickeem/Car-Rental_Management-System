@@ -141,11 +141,12 @@
             })
                 .then(res => res.text())
                 .then((data) => {
-                    console.log("Form submission successful!");
-                    console.log(data);
+                    
+                    alert("Vehicle added sucessfully");
                     window.location.reload(true);
                 })
                 .catch((error) => {
+                    alert("Failed to add Vehicle")
                     console.error("Form submission error: ", error);
                 });
         }

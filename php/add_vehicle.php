@@ -22,9 +22,9 @@ $sql = "INSERT INTO vehicles (make, model, year, vin, interior_color, exterior_c
 
 // execute the SQL statement
 if (mysqli_query($conn, $sql)) {
-    echo "New vehicle record created successfully";
+    echo json_encode(array('success'=> "true"));
 } else {
-    echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+    echo json_encode(array('success'=> "false"));;
 }
 
 // close the database connection
