@@ -3,19 +3,14 @@
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 
-// Replace the following values with your own database credentials
-$servername = "localhost";
-$username = "your_username";
-$password = "your_password";
-$dbname = "rental_system";
+// establish a database connection
+$conn = mysqli_connect('localhost', 'root', '', 'rental_system');
 
-// Create a connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check the connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+// check for connection errors
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
 }
+
 
 // Get the customer's driver's license number from the request
 $license = $_POST['license'];
