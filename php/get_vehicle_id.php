@@ -7,7 +7,7 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-$license_plate = $_POST['license_plate'];
+$license_plate = $_POST['pattern'];
 
 $query = "SELECT id FROM vehicles WHERE license_plate_number = ?";
 $stmt = $conn->prepare($query);

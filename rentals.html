@@ -43,21 +43,23 @@
             <fieldset>
                 <h2>Customer Information</h2>
 
+                <input type="hidden" name="customer-id" id="customer-id">
+
                 <div class="autocomplete">
                     <label for="license">Select Driver's License Number</label>
-                    <input type="text" name="license" id="license" placeholder="Driver License Number">
+                    <input type="text" name="license" id="license" placeholder="Driver License Number" required>
                 </div>
 
 
                 <div class="grid">
                     <label for="first-name">
                         First Name
-                        <input type="text" name="first-name" id="first-name" placeholder="First Name" required>
+                        <input type="text" name="first-name" id="first-name" placeholder="First Name" readonly>
                     </label>
 
                     <label for="last-name">
                         Last Name
-                        <input type="text" name="last-name" id="last-name" placeholder="Last Name" required>
+                        <input type="text" name="last-name" id="last-name" placeholder="Last Name" readonly>
                     </label>
 
                 </div>
@@ -65,12 +67,12 @@
                 <div class="grid">
                     <label for="email-address">Email Address
                         <input type="email" name="email-address" id="email-address" placeholder="Email Address"
-                            required>
+                            readonly>
                     </label>
 
 
                     <label for="phone-number">Phone Number
-                        <input type="tel" name="phone-number" id="phone-number">
+                        <input type="tel" name="phone-number" id="phone-number" readonly>
                     </label>
                 </div>
 
@@ -82,9 +84,11 @@
             <fieldset>
                 <h2>Vehicle Information</h2>
 
+                <input type="hidden" name="vehicle-id" id="vehicle-id">
+
                 <div class="autocomplete">
                     <label for="license-plate">License Plate Number</label>
-                    <input type="text" name="license-plate" id="license-plate">
+                    <input type="text" name="license-plate" id="license-plate" required>
                 </div>
                 
 
@@ -94,25 +98,25 @@
                 <div class="grid">
                     <label for="Make">
                         Make
-                        <input type="text" id="Make" name="Make" placeholder="Make" required>
+                        <input type="text" id="Make" name="Make" placeholder="Make" readonly>
                     </label>
 
                     <label for="Model">
                         Model
-                        <input type="text" id="Model" name="Model" placeholder="Model" required>
+                        <input type="text" id="Model" name="Model" placeholder="Model" readonly>
                     </label>
                 </div>
 
                 <label for="year">Year</label>
-                <input type="number" name="year" id="year" required>
+                <input type="number" name="year" id="year" readonly>
 
 
                 <div class="grid">
                     <label for="interior-color">Interior Color</label>
-                    <input type="text" name="interior-color" id="interior-color" placeholder="Interior Color">
+                    <input type="text" name="interior-color" id="interior-color" placeholder="Interior Color" readonly>
 
                     <label for="exterior-color">Exterior color</label>
-                    <input type="text" name="exterior-color" id="exterior-color" placeholder="Exterior Color">
+                    <input type="text" name="exterior-color" id="exterior-color" placeholder="Exterior Color" readonly>
                 </div>
 
             </fieldset>
@@ -143,10 +147,10 @@
 
                 <div class="grid">
                     <label for="rental-start">Rental Start Date
-                        <input type="date" name="rental-start" id="rental-start" disabled>
+                        <input type="date" name="rental-start" id="rental-start" readonly>
                     </label>
                     <label for="rental-end">Rental End Date
-                        <input type="date" name="rental-end" id="rental-end" disabled>
+                        <input type="date" name="rental-end" id="rental-end" readonly>
                     </label>
                 </div>
 
@@ -198,6 +202,7 @@
             let rentals = document.querySelectorAll('.rentals');
 
             if (input_type.value == "0") { // rentals
+                switchRequired('rentals', 'returns');
                 for (let index = 0; index < rentals.length; index++) {
                     rentals[index].classList.remove('hide');
                 }
@@ -206,6 +211,7 @@
                 }
 
             } else if (input_type.value == "1") { // returns
+                switchRequired('returns', 'rentals' );
                 for (let index = 0; index < rentals.length; index++) {
                     rentals[index].classList.add('hide');
                 }
@@ -214,6 +220,20 @@
                 }
             }
         });
+
+        function switchRequired(enable, disable) {
+            // make certain inputs required
+            inputs = document.querySelectorAll(`.${enable} input`);
+            for (let index = 0; index < inputs.length; index++) {
+                inputs[index].required = true;  
+            }
+
+            // make other inputs not required
+            inputs = document.querySelectorAll(`.${disable} input`);
+            for (let index = 0; index < inputs.length; index++) {
+                inputs[index].required = false;  
+            }
+        }
 
         form.addEventListener('submit', SaveData)
         async function SaveData(e) {
@@ -252,9 +272,12 @@
                     .then(res => res.json())
                     .then((data) => {
                         if (data.length > 0) {
+                            document.getElementById('customer-id').value = data[0]['id'];
+                            updateReturns();
+
                             document.getElementById('first-name').value = data[0]['first_name'];
                             document.getElementById('last-name').value = data[0]['last_name'];
-                            // Add the following two lines
+                            
                             document.getElementById('email-address').value = data[0]['email'];
                             document.getElementById('phone-number').value = data[0]['phone_number'];
                         }
@@ -270,6 +293,10 @@
                     .then(res => res.json())
                     .then((data) => {
                         if (data.length > 0) {
+
+                            document.getElementById('vehicle-id').value = data[0]['id'];
+                            updateReturns();
+
                             document.getElementById('Make').value = data[0]['make'];
                             document.getElementById('Model').value = data[0]['model'];
                             document.getElementById('year').value = data[0]['year'];
@@ -280,7 +307,27 @@
             }
 
 
+        function updateReturns() {
+            let vehicle_id = document.querySelector('.vehicle-id');
+            let customer_id = document.querySelector('.customer-id');
 
+            if (vehicle_id.value != '' && customer_id.value != '') {
+                let formData = new FormData();
+                formData.append('vehicle_id', vehicle_id);
+                formData.append('customer_id', customer_id);
+                fetch("php/getRental.php", {
+                    method: 'post',
+                    body: formData
+                })
+                    .then(res => res.json())
+                    .then((data) => {
+                        if (data.length > 0) {
+                            document.getElementById('rental-start').value = data[0]['rental_start_date'];
+                            document.getElementById('rental-end').value = data[0]['rental_end_date'];
+                        }
+                    });
+            }
+        }
         function autocomplete(inp) {
             var currentFocus;
             inp.addEventListener("input", function (e) {
@@ -295,9 +342,11 @@
                 this.parentNode.appendChild(list);
 
                 let formData = new FormData();
-                formData.append('pattern', e.value);
-                let php_files = ['LicensePlateNumber.php','DriversLicenseNumber.php'] // just example file names
+                
+                let php_files = ['fetch_license_plates.php','fetch_license.php'] // just example file names
                 var field_to_get = ['license_plate_number', 'driver_license_number']; // name of fields in sql table
+
+                
                 var fill_functions = [fetchVehicleFields, fetchCustomerFields];
                 
                 var index = 0; // index of php file to use
@@ -308,17 +357,21 @@
                 else if (inp.getAttribute('id') == 'license-plate') { // license plate is being updated to 
                     index = 0;
                 }
+
+
+                formData.append('pattern', inp.value);
                 fetch("php/"+php_files[index], {
                     method: 'post',
                     body: formData
                 })
                     .then(res => res.json())
                     .then((data) => {
+                        console.log(data);
                         for (i = 0; i < data.length; i++) {
                             // based on the data received from query
                             // as long as there are more than 1 results
                             b = document.createElement("div"); // create a div to hold each result
-                            b.innerHTML = data[i]['Model']; // from each result in data get 
+                            b.innerHTML = data[i][field_to_get[index]]; // from each result in data get 
                             // put each result returned of driver's license value or license plate number into hidden input value
                             b.innerHTML += "<input type='hidden' value='" + data[i][field_to_get[index]] + "'>"; 
 
@@ -382,6 +435,7 @@
                             document.getElementById('year').value = data[0]['year'];
                             document.getElementById('interior-color').value = data[0]['interior_color'];
                             document.getElementById('exterior-color').value = data[0]['exterior_color'];
+                            //document.getElementById('existing-damage').value = data[0]['existing_damage'];
                         }
                     });
             }
