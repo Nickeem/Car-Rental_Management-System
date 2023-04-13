@@ -50,11 +50,12 @@ $stmt->close(); */
 // update vehicle record to rented
 $update_query = "UPDATE vehicles SET availability = 'rented' WHERE id = $vehicle_id";
 $result = mysqli_query($conn, $update_query);
+$rental_status = "ongoing";
 
 // Insert rental record into rentals table
-$sql = "INSERT INTO rentals (customer_id, vehicle_id, rental_start_date, rental_end_date, rental_rate, payment_amount, vehicle_condition, rental_status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+$sql = "INSERT INTO rentals (customer_id, vehicle_id, rental_start_date, rental_end_date, rental_rate, payment_amount, vehicle_condition, rental_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("iisssss", $customer_id, $vehicle_id, $rental_start_date, $rental_end_date, $rental_rate, $payment_amount, $vehicle_condition, "ongoing");
+$stmt->bind_param("iissssss", $customer_id, $vehicle_id, $rental_start_date, $rental_end_date, $rental_rate, $payment_amount, $vehicle_condition, $rental_status);
 $result = $stmt->execute();
 
 if ($result) {
