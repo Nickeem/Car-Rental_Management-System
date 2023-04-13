@@ -275,7 +275,7 @@
             })
                 .then(res => res.text())
                 .then((data) => {
-                   window.location.reload(true);
+                   //window.location.reload(true);
                 });
         }
 
@@ -427,7 +427,7 @@
                             document.getElementById('year').value = data[0]['year'];
                             document.getElementById('interior-color').value = data[0]['interior_color'];
                             document.getElementById('exterior-color').value = data[0]['exterior_color'];
-                            //document.getElementById('existing-damage').value = data[0]['existing_damage'];
+                            document.getElementById('existing-damage').innerHTML = data[0]['vehicleCondition'];
                         }
                     });
             }

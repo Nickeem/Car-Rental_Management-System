@@ -79,7 +79,7 @@
 
     <div>
       <table role="grid">
-        <thead>
+      <!--  <thead>
           <tr>
             <th scope="col">#</th>
             <th scope="col">Heading</th>
@@ -124,7 +124,7 @@
             <td scope="col">Total</td>
             <td scope="col">Total</td>
           </tr>
-        </tfoot>
+        </tfoot> -->
       </table>
     </div>
   </main>
@@ -228,16 +228,16 @@
       })
               .then(res => res.json())
               .then((data) => {
+                console.log(data);
                 let counter = 1;
                 var body = document.createElement('tbody');
                 let head = getHead(Object.keys(data[0])); // get field names from data
 
                 data.forEach(element => { // for each element in array object
                   let row = document.createElement('tr');
-                  let th = document.createElement('th');
-                  th.setAttribute('scope', 'row');
-                  th.innerHTML = counter++; // display row number and increment for next row
-                  row.append(th);
+                  let td = document.createElement('td');
+                  td.innerHTML = counter++; // display row number and increment for next row
+                  row.appendChild(td);
                   for (const [key, value] of Object.entries(element)) {
                     // loop through each row of the results
                     let col = document.createElement('td');
@@ -258,20 +258,20 @@
     }
     function getHead(headers) {
       let header = document.createElement('thead');
-      let th = document.createElement('th');
+      let row =  document.createElement('tr');
       
       // first header to number records
-      let td = document.createElement('td');
-      td.innerHTML = "Row";
+      let th1 = document.createElement('th');
+      th1.innerHTML = "Row";
 
-      th.appendChild(td); // header for row number
+      row.appendChild(th1); // header for row number
 
       headers.forEach(value => {
-        let td = document.createElement('td');
-        td.innerHTML = value;
-        th.appendChild(td);
+        let th = document.createElement('th');
+        th.innerHTML = value;
+        row.appendChild(th);
       });
-      header.appendChild(th); // Add this line to append 'tr' to 'header'
+      header.appendChild(row); // Add this line to append 'tr' to 'header'
       return header; // Add this line to return 'header'
     }
 

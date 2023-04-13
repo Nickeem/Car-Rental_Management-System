@@ -26,7 +26,7 @@ $rental_end_date = date('Y-m-d', $rental_end_date);
 $payment_amount = $day_diff * $rental_rate;
 
 //$additional_charges = ;
-$vehicle_condition = ""; // Initialize this variable. You can set it using the appropriate form field.
+
 
 /*
 // Get customer_id using the license
@@ -53,10 +53,17 @@ $result = mysqli_query($conn, $update_query);
 $rental_status = "ongoing";
 
 // Insert rental record into rentals table
-$sql = "INSERT INTO rentals (customer_id, vehicle_id, rental_start_date, rental_end_date, rental_rate, payment_amount, vehicle_condition, rental_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+$sql = "INSERT INTO rentals (customer_id, vehicle_id, rental_start_date, rental_end_date, rental_rate, payment_amount, rental_status) VALUES (?, ?, ?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("iissssss", $customer_id, $vehicle_id, $rental_start_date, $rental_end_date, $rental_rate, $payment_amount, $vehicle_condition, $rental_status);
+$stmt->bind_param("iisssss", $customer_id, $vehicle_id, $rental_start_date, $rental_end_date, $rental_rate, $payment_amount, $rental_status);
 $result = $stmt->execute();
+
+if ($_POST['new-damage']) {
+    $new_damage = $_POST['new-damage'];
+    $update_damge_query = "UPDATE vehicles SET vehicleCondition = $new_damage;";
+    $damage_update_result = mysqli_query($conn, $new_damage);
+     // Initialize this variable. You can set it using the appropriate form field.
+}
 
 if ($result) {
     echo "Rental created successfully.";
