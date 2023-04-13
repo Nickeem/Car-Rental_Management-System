@@ -47,7 +47,7 @@
 
                 <div class="autocomplete">
                     <label for="license">Select Driver's License Number</label>
-                    <input type="search" name="license" id="license" placeholder="Driver License Number" required>
+                    <input type="search" name="license" id="license" placeholder="Driver License Number" autocomplete="nope" required>
                 </div>
 
 
@@ -88,7 +88,7 @@
 
                 <div class="autocomplete">
                     <label for="license-plate">License Plate Number</label>
-                    <input type="search" name="license-plate" id="license-plate" pattern="^[A-Za-z]{1,2}\d{1,4}$" required>
+                    <input type="search" name="license-plate" id="license-plate" autocomplete="off" pattern="^[A-Za-z]{1,2}\d{1,4}$" required>
                 </div>
                 
 
@@ -134,7 +134,7 @@
                 </div>
 
                 <label for="rental-rate">Rental Rate</label>
-                <input type="text" name="rental-rate" id="rental-rate" required>
+                <input type="number" name="rental-rate" id="rental-rate" min="0" value="0" required>
 
                 
             </fieldset>
