@@ -12,7 +12,7 @@ $customer_id = (int) $_POST['customer-id'];
 $vehicle_id = (int) $_POST['vehicle-id'];
 
 $actual_return_date = $_POST['actual-return-date'];
-$actual_return_date = strtotime("$actual_return_date");
+$actual_return_date = strtotime($actual_return_date);
 $actual_return_date = date('Y-m-d', $actual_return_date);
 
 
