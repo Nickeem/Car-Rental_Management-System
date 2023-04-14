@@ -7,12 +7,16 @@ if (!$conn) {
 }
 
 $sql = "SELECT 
-            vehicle_id,
+            v.id AS vehicle_id,
+            v.make,
+            v.model,
+            v.year,
             COUNT(*) as total_rentals,
-            COUNT(CASE WHEN rental_status = 'completed' THEN 1 END) as total_returns
-        FROM rentals
-        GROUP BY vehicle_id
-        ORDER BY vehicle_id;";
+            COUNT(CASE WHEN r.rental_status = 'completed' THEN 1 END) as total_returns
+        FROM rentals r
+        JOIN vehicles v ON r.vehicle_id = v.id
+        GROUP BY v.id, v.make, v.model, v.year
+        ORDER BY total_rentals DESC, v.id;";
 
 $result = mysqli_query($conn, $sql);
 
@@ -28,4 +32,3 @@ if (mysqli_num_rows($result) > 0) {
 
 mysqli_close($conn);
 ?>
-
