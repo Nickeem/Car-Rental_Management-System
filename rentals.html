@@ -303,6 +303,9 @@
                             document.getElementById('rental-end').value = data[0]['rental_end_date'].split(' ')[0];
                             document.getElementById('amount-charged').innerHTML = data[0]['payment_amount'];
                         }
+                        else {
+                            alert('There are no ongoing rentals matching the data entered');
+                        }
                     });
             }
         }

@@ -48,7 +48,7 @@
     <form>
       <div class="vehicle-rental autocomplete">
         <label for="license-plate">Enter Vehicle License Plate Number</label>
-        <input type="text" name="license-plate" id="licence-plate" placeholder="Vehicle License Plate">
+        <input type="text" name="license-plate" id="license-plate" placeholder="Vehicle License Plate">
         <div></div>
       </div>
   
@@ -328,7 +328,7 @@
                             list.appendChild(b); // append each selection to suggestion list
                         }
                     })
-            });
+          });
 
             function closeAllLists(elmnt) {  // close list with all suggestions
                 /*close all autocomplete lists in the document,
@@ -345,6 +345,7 @@
                 closeAllLists(e.target);
             });
         }
+        
 
         autocomplete(license);
         autocomplete(license_plate);
