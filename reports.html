@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/pico.min.css">
+  <link rel="stylesheet" href="css/custom.css">
   <style>
     .hide {
       display: none;
@@ -293,10 +294,10 @@
                 this.parentNode.appendChild(list);
 
                 let formData = new FormData();
-                formData.append('pattern', e.value);
-                let php_files = ['LicensePlateNumber.php','DriversLicenseNumber.php'] // just example file names
+                formData.append('pattern', inp.value);
+                let php_files = ['fetch_license_plates.php','fetch_license.php'] 
                 var field_to_get = ['license_plate_number', 'driver_license_number']; // name of fields in sql table
-                var fill_functions = [fetchVehicleFields, fetchCustomerFields];
+                //var fill_functions = [fetchVehicleFields, fetchCustomerFields];
                 
                 var index = 0; // index of php file to use
                 
@@ -316,7 +317,7 @@
                             // based on the data received from query
                             // as long as there are more than 1 results
                             b = document.createElement("div"); // create a div to hold each result
-                            b.innerHTML = data[i]['Model']; // from each result in data get 
+                            b.innerHTML = data[i][field_to_get[index]]; // from each result in data get 
                             // put each result returned of driver's license value or license plate number into hidden input value
                             b.innerHTML += "<input type='hidden' value='" + data[i][field_to_get[index]] + "'>"; 
 

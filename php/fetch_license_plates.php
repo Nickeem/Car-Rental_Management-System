@@ -9,7 +9,7 @@ $pattern = $_POST['pattern'];
 
 $add_availability = "";
 
-if ($_POST['return_rented']) { // if looking for specific availablity status
+if (isset($_POST['return_rented'])) { // if looking for specific availablity status
     $return_rented = $_POST['return_rented'];
     $availability = "not-rented";
 
