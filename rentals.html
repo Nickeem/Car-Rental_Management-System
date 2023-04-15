@@ -122,7 +122,7 @@
             </fieldset>
 
             <fieldset class="rentals">
-                <h2>Rental Aggreement</h2>
+                <h2>Rental Agreement</h2>
 
                 <div class="grid">
                     <label for="rental-start-date">Rental Start Date
@@ -165,7 +165,7 @@
 
             <fieldset>
                 <h2>Vehicle Condition</h2>
-                <label for="existing-damage">Existing Damage: <span id="existing-damage"></span></label>
+                <label for="existing-damage">Condition: <span id="existing-damage"></span></label>
 
                 <label for="new-damage" class="returns hide">New damage</label>
                 <textarea name="new-damage" id="new-damage" cols="30" rows="10" class="returns hide"></textarea>
@@ -304,7 +304,10 @@
                             document.getElementById('amount-charged').innerHTML = data[0]['payment_amount'];
                         }
                         else {
-                            alert('There are no ongoing rentals matching the data entered');
+                            if (input_type.value == "1") { // returns form
+                                alert('There are no ongoing rentals matching the data entered');
+                            }
+                            
                         }
                     });
             }
